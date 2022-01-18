@@ -24,8 +24,8 @@ function movePlayer(direction){
     console.log(position[0] + " " + position[1]);
 }
 
+//Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-    console.log(event.key);
         switch(event.key){
             case 'w': movePlayer(0);break;
             case 's': movePlayer(1);break;
@@ -33,3 +33,8 @@ document.addEventListener('keydown', function(event) {
             case 'd': movePlayer(3);break;
     }
 });
+
+//Import Java Script File
+var script = document.createElement('script');
+script.src = "./js/lvl1.js";
+document.head.appendChild(script)

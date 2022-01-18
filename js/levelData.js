@@ -1,5 +1,3 @@
-console.log("Hallo")
-
 function lvl1(){
 let levelTemplate = [
     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ],

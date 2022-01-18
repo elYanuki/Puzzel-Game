@@ -5,13 +5,13 @@ function moveplayer(direction){
 
     switch (direction){
         case 0: //up
-            Math.max(--player.style.gridRow, 0)
+            player.style.gridRow = Math.max(--player.style.gridRow, 1)
             break
         case 1: //down
-            player.style.gridColumn = Math.min(++player.style.gridRow, 12)
+            player.style.gridRow = Math.min(++player.style.gridRow, 12)
             break
         case 2: //left
-            Math.max(--player.style.gridColumn, 0)
+            player.style.gridColumn = Math.max(--player.style.gridColumn, 1)
             break
         case 3: //right
             player.style.gridColumn = Math.min(++player.style.gridColumn, 12)
@@ -23,9 +23,9 @@ function moveplayer(direction){
 document.addEventListener('keydown', function(event) {
     console.log(event.key);
         switch(event.key){
-            case 'w': moveplayer(0);
-            case 'a': moveplayer(1);
-            case 's': moveplayer(2);
-            case 'd': moveplayer(3);
+            case 'w': moveplayer(0);break
+            case 's': moveplayer(1);break
+            case 'a': moveplayer(2);break
+            case 'd': moveplayer(3);break
     }
 });

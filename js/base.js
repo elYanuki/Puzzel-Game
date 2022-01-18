@@ -5,19 +5,18 @@ function moveplayer(direction){
 
     switch (direction){
         case 0: //up
-            player.style.gridRow = Math.max(--player.style.gridRow, 1)
+            Math.max(--player.style.gridRow, 1)
             break
         case 1: //down
             player.style.gridRow = Math.min(++player.style.gridRow, 12)
             break
         case 2: //left
-            player.style.gridColumn = Math.max(--player.style.gridColumn, 1)
+            Math.max(--player.style.gridColumn, 1)
             break
         case 3: //right
             player.style.gridColumn = Math.min(++player.style.gridColumn, 12)
             break
     }
-    //yaniks test comment
 }
 
 document.addEventListener('keydown', function(event) {
@@ -29,3 +28,7 @@ document.addEventListener('keydown', function(event) {
             case 'd': moveplayer(3);break
     }
 });
+
+var script = document.createElement('script');
+script.src = "./js/lvl1.js";
+document.head.appendChild(script)

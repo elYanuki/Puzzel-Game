@@ -37,6 +37,7 @@ main{
     width: 5vw;
     height: 5vw;
     background-color: green;
+    transition: all 1s;
 }
 
 #flex{
@@ -48,6 +49,7 @@ main{
 /**********Keyframes**********/
 
 /**********Responsive**********/
+
 /**********Variables**********/
 :root {
     --maincolor: red

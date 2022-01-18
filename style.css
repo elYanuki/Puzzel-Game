@@ -38,6 +38,11 @@ main{
     transition: all 1s;
 }
 
+.things{
+    width: 50%;
+    height: 50%;
+}
+
 #flex{
     display: flex;
 }

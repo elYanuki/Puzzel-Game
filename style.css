@@ -47,6 +47,11 @@ main{
     z-index: 2;
 }
 
+.things{
+    width: 50%;
+    height: 50%;
+}
+
 #flex{
     display: flex;
 }

@@ -57,7 +57,7 @@ function movePlayer(direction){
     console.log("coordinates: r:" + position[0] + " c:" + position[1]);
 }
 
-//This Function checks the following move of the Player and returns if the move is possible or not
+//Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
     //Next Position is a Block
     if(data[nextY-1][nextX-1] == "block"){
@@ -74,6 +74,23 @@ function checkMove(nextY, nextX){
         return true;
     }
 }
+
+//Platziert alle Gegenstände auf dem Spiel
+function setTargets(){
+    let thing = document.getElementById("thing")
+
+    for(let i = 0; i < data.length; i++){
+        for(let j = 0; j < data[0].length; j++){
+            switch(data[i][j]){
+                case ("block"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="things"></div>`
+                                console.log(i, j);
+                                //thing.style = `backgroundImage: url(block.png);`  
+                                break;
+            }
+        }
+    }
+}
+setTargets();
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {

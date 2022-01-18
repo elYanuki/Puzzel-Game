@@ -1,6 +1,21 @@
-document.getElementById("player").style =  "grid-row: 2;grid-column: 2;"
 let position = [2,2]//[row][column]
-let maxWidth = 12
+let maxWidth
+
+function loadLevel(index){
+    let data = lvl1()
+    document.getElementById("test").innerHTML = `${data[1][1]}`
+
+    maxWidth = data[1].length
+    
+    document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;`
+    position = [data[data.length-1][0],data[data.length-1][1]]
+
+    let gridItems = ""
+    for (let i = 0; i < data.length-2; i++) {
+        gridItems += " 1fr"
+    }
+    document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};`
+}
 
 function movePlayer(direction){
     let player = document.getElementById("player")
@@ -20,6 +35,7 @@ function movePlayer(direction){
             break
     }
 
+
     player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
     console.log(position[0] + " " + position[1]);
 }
@@ -33,8 +49,3 @@ document.addEventListener('keydown', function(event) {
             case 'd': movePlayer(3);break;
     }
 });
-
-//Import Java Script File
-var script = document.createElement('script');
-script.src = "./js/lvl1.js";
-document.head.appendChild(script)

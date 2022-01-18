@@ -15,8 +15,6 @@ img{
 
 main{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-auto-rows: 8.33333vh;
     height: 100vh;
     width: 100vh;
@@ -34,8 +32,8 @@ main{
 }
 
 #player{
-    width: 5vw;
-    height: 5vw;
+    width: 50%;
+    height: 50%;
     background-color: green;
     transition: all 1s;
 }

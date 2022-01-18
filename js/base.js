@@ -17,7 +17,7 @@ function moveplayer(direction){
             player.style.gridColumn = Math.min(++player.style.gridColumn, 12)
             break
     }
-    
+    //yaniks test comment
 }
 
 document.addEventListener('keydown', function(event) {

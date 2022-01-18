@@ -23,9 +23,9 @@ function moveplayer(direction){
 document.addEventListener('keydown', function(event) {
     console.log(event.key);
         switch(event.key){
-            case 'w': moveplayer(0);break
-            case 'a': moveplayer(1);break
-            case 's': moveplayer(2);break
-            case 'd': moveplayer(3);break
+            case 'w': moveplayer(0);
+            case 'a': moveplayer(1);
+            case 's': moveplayer(2);
+            case 'd': moveplayer(3);
     }
 });

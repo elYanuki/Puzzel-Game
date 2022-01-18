@@ -19,6 +19,7 @@ function moveplayer(direction){
     }
 }
 
+//Select Keys for Movement
 document.addEventListener('keydown', function(event) {
         switch(event.key){
             case 'w': moveplayer(0);break
@@ -28,6 +29,7 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+//Import Java Script File
 var script = document.createElement('script');
 script.src = "./js/lvl1.js";
 document.head.appendChild(script)

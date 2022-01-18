@@ -62,7 +62,15 @@ function checkMove(nextY, nextX){
     //Next Position is a Block
     if(data[nextY-1][nextX-1] == "block"){
         return false;
-    } else{
+    }
+    //Next Position is a Trap
+    if(data[nextY-1][nextX-1] == "trap"){
+        console.log("ded");
+        return true;
+    } 
+    
+    
+    else{ //feld ist leer - kann betreten werden
         return true;
     }
 }

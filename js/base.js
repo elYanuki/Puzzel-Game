@@ -5,21 +5,13 @@ function moveplayer(direction){
 
     switch (direction){
         case 0: //up
-<<<<<<< Updated upstream
             Math.max(--player.style.gridRow, 1)
-=======
-            player.style.gridRow = Math.max(--player.style.gridRow, 0)
->>>>>>> Stashed changes
             break
         case 1: //down
             player.style.gridRow = Math.min(++player.style.gridRow, 12)
             break
         case 2: //left
-<<<<<<< Updated upstream
             Math.max(--player.style.gridColumn, 1)
-=======
-            player.style.gridColumn = Math.max(--player.style.gridColumn, 0)
->>>>>>> Stashed changes
             break
         case 3: //right
             player.style.gridColumn = Math.min(++player.style.gridColumn, 12)
@@ -29,7 +21,6 @@ function moveplayer(direction){
 
 document.addEventListener('keydown', function(event) {
         switch(event.key){
-<<<<<<< Updated upstream
             case 'w': moveplayer(0);break
             case 's': moveplayer(1);break
             case 'a': moveplayer(2);break
@@ -40,11 +31,3 @@ document.addEventListener('keydown', function(event) {
 var script = document.createElement('script');
 script.src = "./js/lvl1.js";
 document.head.appendChild(script)
-=======
-            case 'w': moveplayer(0);break;
-            case 's': moveplayer(1);break;
-            case 'a': moveplayer(2);break;
-            case 'd': moveplayer(3);break;
-        }
-});
->>>>>>> Stashed changes

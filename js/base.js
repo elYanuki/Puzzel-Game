@@ -20,13 +20,12 @@ function moveplayer(direction){
     
 }
 
-function input(key, elem){
-    elem.value = ''
-
-    switch(key.keyCode){
-        case 119: moveplayer(0);break
-        case 115: moveplayer(1);break
-        case 97: moveplayer(2);break
-        case 100: moveplayer(3);break
+document.addEventListener('keydown', function(event) {
+    console.log(event.key);
+        switch(event.key){
+            case 'w': moveplayer(0);break
+            case 'a': moveplayer(1);break
+            case 's': moveplayer(2);break
+            case 'd': moveplayer(3);break
     }
-}
+});

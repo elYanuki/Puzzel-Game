@@ -2,6 +2,12 @@ let position = [2,2]//[row][column]
 let data
 
 loadLevel(1)
+movePlayer(1);
+movePlayer(2);
+movePlayer(3);
+movePlayer(0);
+document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
+//position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
 
 function loadLevel(index){
     switch (index){
@@ -23,7 +29,7 @@ function loadLevel(index){
 
 function movePlayer(direction){
     let player = document.getElementById("player")
-    let move;
+    let move = false;
 
     switch (direction){
         case 0: //up w
@@ -45,7 +51,7 @@ function movePlayer(direction){
             }          
             break
         case 3: //right d 
-            move = checkMove(position[0], Math.max(position[1] +1, 1))
+            move = checkMove(position[0], Math.max(position[1]+1, 1))
             if(move == true){
                 position[1] = Math.min(++position[1], data[1].length)
             }   
@@ -83,7 +89,9 @@ function setTargets(){
         for(let j = 0; j < data[0].length; j++){
             switch(data[i][j]){
                 case ("block"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="things"></div>`
-                                console.log(i, j);
+                                //thing.style = `backgroundImage: url(block.png);`  
+                                break;
+                case ("trap"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="things"></div>`
                                 //thing.style = `backgroundImage: url(block.png);`  
                                 break;
             }

@@ -2,6 +2,7 @@ let position = [2,2]//[row][column]
 let data
 
 loadLevel(1)
+setElements();
 
 function loadLevel(index){
     switch (index){
@@ -103,20 +104,20 @@ function checkMove(nextY, nextX){
 }
 
 //Platziert alle Gegenstände auf dem Spiel
-function setTargets(){
+function setElements(){
     console.log(data[1][1].substr(0,2))
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
                 let sub = data[i][j].substr(0,2)
                 switch(sub){
-                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="things"></div>`
+                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="blocks"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="things"></div>`
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="blocks"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="things"></div>`
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="blocks"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
                 }
@@ -124,7 +125,6 @@ function setTargets(){
         }
     }
 }
-setTargets();
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {

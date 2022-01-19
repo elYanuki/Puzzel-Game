@@ -9,12 +9,13 @@ img{
     width:100%
 }
 
-/**********Main Style**********/
-
 body{
     /* background-image: url(./img/background.png); */
     background-color: rgb(39, 39, 39);
+    overflow: hidden;
 }
+
+/**********Main Style**********/
 
 .flex{
     display: flex;
@@ -50,7 +51,7 @@ body{
     margin: 5vh 2vh 5vh 5vh;
 }
 
-.things{
+.blocks{
     width: 80%;
     height: 80%;
 }
@@ -111,6 +112,8 @@ body{
     height: fit-content;
     width: 33rem;
     color: white;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 #main-info h1{
@@ -129,6 +132,38 @@ body{
     height: 80%;
     background-color: green;
     z-index: 2;
+}
+
+#info{
+    width: 10rem;
+    padding: 0.3rem;
+    box-sizing: border-box;
+    height: 3rem;
+    background-color: rgba(255, 0, 0, 0.336);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -4rem;
+}
+
+#info-arrow{
+    background-color: rgba(255, 0, 0, 0.336);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1rem;
+    height: 1rem;
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+    top:-1rem;
+}
+
+#info-relative{
+    grid-column: 5;
+    grid-row: 5;
+    position: relative;
+    z-index: 3;
+    width: 1%;
+    height: 1%;
 }
 
 /*---------blocks---------*/

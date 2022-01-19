@@ -130,8 +130,8 @@ body{
 
 
 #player{
-    width: 80%;
-    height: 80%;
+    width: 50%;
+    height: 50%;
     background-color: green;
     z-index: 2;
 }
@@ -160,12 +160,11 @@ body{
 }
 
 #info-relative{
-    grid-column: 5;
-    grid-row: 5;
     position: relative;
     z-index: 3;
     width: 1%;
     height: 1%;
+    visibility:hidden;
 }
 
 /*---------blocks---------*/

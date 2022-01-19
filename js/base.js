@@ -1,6 +1,7 @@
 let position = [2,2]//[row][column]
 let data
-let effekt = "normal";
+let effect = "normal"
+let eDown = false
 
 loadLevel(1)
 setElements();
@@ -89,14 +90,14 @@ function checkMove(nextY, nextX){
             trap();
             return false;
         } 
-        //Next Position is a Portale
+        //Next Position is a Portal
         if(data[nextY-1][nextX-1].substr(0,2) == "po"){
             portale(nextY, nextX);
             return false;
         } 
         //Next Position is a Softwall
         if(data[nextY-1][nextX-1].substr(0,2) == "sw"){
-            if(effekt == "ghost"){
+            if(effect == "ghost"){
                 return true;
             } else{
                 return false;
@@ -109,25 +110,30 @@ function checkMove(nextY, nextX){
     }
 }
 
-//Diese Funktion schaut ob ein Item auf dem Feld liegt
+//Diese Funktion schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
 function checkPosition(){
     let posPlayer = data[position[0]-1][position[1]-1]
     if(posPlayer){
-        if(posPlayer.substr(0,2) == "gh"){
-            ghost.parentNode.removeChild(ghost);
-            effekt = "ghost";
-            data[position[0]-1][position[1]-1] = "";
+        createInfoPopup(position[0], position[1]);
+        if (eDown == true) {
+            clearInfoPopup()
+            if (posPlayer.substr(0, 2) == "gh") {
+                ghost.parentNode.removeChild(ghost);
+                effect = "ghost";
+                data[position[0] - 1][position[1] - 1] = "";
 
-            setTimeout(function(){
-                effekt = "normal"
-            }, 10000)
-
-            pickupPopup(position[0], position[1]);
+                setTimeout(function () {
+                    effect = "normal"
+                }, 10000)
+            }
         }
     }
-    console.log(effekt)
+    else{
+        clearInfoPopup()
+    }
+    console.log(effect)
 
-    return effekt;
+    return effect;
 }
 
 //Platziert alle Gegenstände auf dem Spiel
@@ -159,6 +165,20 @@ function setElements(){
     }
 }
 
+function createInfoPopup(x,y,text) {
+    if(text) { //dont specifie text to use default
+        document.getElementById("info-text").innerHTML = text
+    }
+    else{
+        document.getElementById("info-text").innerHTML = `Press E to pick up the item`
+    }
+    document.getElementById("info-relative").style = `grid-area: ${x} / ${y} / auto / auto;visibility:visible;`
+}
+
+function clearInfoPopup(){
+    document.getElementById("info-relative").style = `visibility:hidden`
+}
+
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
         switch(event.key){
@@ -166,7 +186,14 @@ document.addEventListener('keydown', function(event) {
             case 's': movePlayer(1);break;
             case 'a': movePlayer(2);break;
             case 'd': movePlayer(3);break;
+            case 'e': eDown = true; checkPosition();break
     }
+});
+
+document.addEventListener('keyup',function(event) {
+    switch(event.key){
+        case 'e': eDown = false;break
+}
 });
 
 function dead(){

@@ -20,6 +20,7 @@ body{
     display: flex;
     width: 100vw;
     height: 100vh;
+    flex-wrap: wrap;
 }
 
 /*---------level layout---------*/
@@ -40,12 +41,14 @@ body{
 #handy{
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
+    height: 90vh;
     margin: 5vh 5vh 5vh 0vh;
     border-radius: 0 2vw 2vw 0;
 }
 #settings{
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
+    height: 90vh;
     margin: 5vh 2vh 5vh 5vh;
 }
 

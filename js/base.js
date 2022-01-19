@@ -2,7 +2,6 @@ let position = [2,2]//[row][column]
 let data
 
 loadLevel(1)
-fixPosition(data[data.length-1][0], data[data.length-1][1]);
 
 function loadLevel(index){
     switch (index){
@@ -26,27 +25,31 @@ function movePlayer(direction){
     let player = document.getElementById("player")
     let move = false;
 
+
+    let pos0 = position[0]
+    let pos1 = position[1]
+
     switch (direction){
         case 0: //up w
-            move = checkMove(Math.max(position[0]-1, 1), position[1]);
+            move = checkMove(--pos0, pos1);
             if(move == true){
                 position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
             }   
             break
         case 1: //down s
-            move = checkMove(Math.max(position[0]+1, 1), position[1]);
+            move = checkMove(++pos0, pos1);
             if(move == true){
                 position[0] = Math.min(++position[0], data[1].length)
             }
             break
-        case 2: //left a 
-            move = checkMove(position[0], Math.max(position[1]-1, 1))
+        case 2: //left a
+            move = checkMove(pos0, --pos1)
             if(move == true){
                 position[1] = Math.max(--position[1], 1)
             }          
             break
         case 3: //right d 
-            move = checkMove(position[0], Math.max(position[1]+1, 1))
+            move = checkMove(pos0, ++pos1)
             if(move == true){
                 position[1] = Math.min(++position[1], data[1].length)
             }   
@@ -60,9 +63,12 @@ function movePlayer(direction){
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
+    console.log("checkmove");
     if(data[nextY-1][nextX-1]){
+        console.log("existing");
         //Next Position is a Wall
         if(data[nextY-1][nextX-1].substr(0,2) == "wa"){
+            console.log("wall");
             return false;
         }
         //Next Position is a Button
@@ -130,14 +136,13 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-function fixPosition(y, x){
-    movePlayer(1);
-    movePlayer(2);
-    movePlayer(3);
-    movePlayer(0);
-    document.getElementById("player").style = `grid-area: ${y} / ${x} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data  
-}
-
 function dead(){
     loadLevel(1);
+}
+
+function SetPlayerPos(row,column){
+    position[0] = row
+    position[1] = column
+    
+    document.getElementById("player").style = `grid-area: ${row} / ${column} / auto / auto;`
 }

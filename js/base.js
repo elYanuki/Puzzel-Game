@@ -2,12 +2,7 @@ let position = [2,2]//[row][column]
 let data
 
 loadLevel(1)
-movePlayer(1);
-movePlayer(2);
-movePlayer(3);
-movePlayer(0);
-document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
-//position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
+fixPosition(data[data.length-1][0], data[data.length-1][1]);
 
 function loadLevel(index){
     switch (index){
@@ -16,7 +11,7 @@ function loadLevel(index){
         case 3: data = lvl3();break;
         case 4: data = lvl4();break;
     }
-    
+
     document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
     position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
 
@@ -65,17 +60,37 @@ function movePlayer(direction){
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
-    //Next Position is a Block
-    if(data[nextY-1][nextX-1] == "block"){
-        return false;
+    if(data[nextY-1][nextX-1]){
+        //Next Position is a Wall
+        if(data[nextY-1][nextX-1].substr(0,2) == "wa"){
+            return false;
+        }
+        //Next Position is a Button
+        if(data[nextY-1][nextX-1].substr(0,2) == "bu"){
+            console.log("action")
+            return true;
+        }
+        //Next Position is a Lever
+        if(data[nextY-1][nextX-1].substr(0,2) == "le"){
+            console.log("action")
+            return true;
+        }
+        //Next Position is a LockedItem
+        if(data[nextY-1][nextX-1].substr(0,6) == "locked"){
+            console.log("Start MiniGame")
+            return true;
+        }
+        //Next Position is a Trap
+        if(data[nextY-1][nextX-1].substr(0,2) == "tr"){
+            trap();
+            return false;
+        } 
+        //Next Position is a Portale
+        if(data[nextY-1][nextX-1].substr(0,2) == "po"){
+            portale(nextY, nextX);
+            return false;
+        } 
     }
-    //Next Position is a Trap
-    if(data[nextY-1][nextX-1] == "trap"){
-        console.log("ded");
-        return true;
-    } 
-    
-    
     else{ //feld ist leer - kann betreten werden
         return true;
     }
@@ -83,17 +98,22 @@ function checkMove(nextY, nextX){
 
 //Platziert alle Gegenstände auf dem Spiel
 function setTargets(){
-    let thing = document.getElementById("thing")
-
+    console.log(data[1][1].substr(0,2))
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
-            switch(data[i][j]){
-                case ("block"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="things"></div>`
-                                //thing.style = `backgroundImage: url(block.png);`  
-                                break;
-                case ("trap"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="things"></div>`
-                                //thing.style = `backgroundImage: url(block.png);`  
-                                break;
+            if(data[i][j]){
+                let sub = data[i][j].substr(0,2)
+                switch(sub){
+                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                }
             }
         }
     }
@@ -109,3 +129,15 @@ document.addEventListener('keydown', function(event) {
             case 'd': movePlayer(3);break;
     }
 });
+
+function fixPosition(y, x){
+    movePlayer(1);
+    movePlayer(2);
+    movePlayer(3);
+    movePlayer(0);
+    document.getElementById("player").style = `grid-area: ${y} / ${x} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data  
+}
+
+function dead(){
+    loadLevel(1);
+}

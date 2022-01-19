@@ -42,12 +42,14 @@ body{
 #handy{
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
+    height: 90vh;
     margin: 5vh 5vh 5vh 0vh;
     border-radius: 0 2vw 2vw 0;
 }
 #settings{
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
+    height: 90vh;
     margin: 5vh 2vh 5vh 5vh;
 }
 
@@ -172,6 +174,10 @@ body{
     width: 80%;
     height: 80%;
 }
+.things{
+    width: 80%;
+    height: 80%;
+}
 
 /**********Imports**********/
 
@@ -179,7 +185,7 @@ body{
     font-family: beba;
     src: url(./imports/BebasNeue-Regular.ttf);
 }
-
+    
 /**********Keyframes**********/
 
 /**********Responsive**********/

@@ -16,9 +16,15 @@ body{
     background-color: rgb(39, 39, 39);
 }
 
-/*---------Area1---------*/
+.flex{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
 
-main{
+/*---------level layout---------*/
+
+#board{
     display: grid;
     grid-auto-rows: 8.33333vh;
     height: 90vh;
@@ -31,40 +37,95 @@ main{
     border: 0.15rem solid rgb(156, 156, 156);
 }
 
-.resize{
-    border: 2px solid;
-    padding: 20px; 
-    min-width: 10vw;
-    max-width: 20vw;
-    resize:horizontal;
-    overflow: auto;
+/*---------main menu layout---------*/
+
+#level-selector{
+    display: flex;
+    width: 33rem;
+    flex-wrap: wrap;
+    align-items: center;
+    height: fit-content;
+    align-self:flex-star;
+    margin-left: 3rem;
 }
 
+#level-selector div{
+    width: 10rem;
+    height: 10rem;
+    box-sizing: border-box;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(78, 78, 78);
+    transition: all 0.4s;
+}
+
+#level-selector div:hover {
+    transform:scale(1.05);
+    font-size: 2.2rem;
+}
+
+#level-selector div:hover p{
+    transform: translateY(-0.5rem);
+}
+
+#level-selector div p{
+    text-align: center;
+    position: absolute;
+    color: white;
+    z-index: 2;
+    font-family: beba;
+    font-size: 2rem;
+    text-shadow: 0 0 1.5qrem black;
+    transition: all 0.4s;
+}
+
+#level-selector div img{
+    padding: 0.5rem;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+#main-info{
+    background-color: rgb(78, 78, 78);
+    margin: 0.5rem;
+    height: fit-content;
+    width: 33rem;
+    color: white;
+}
+
+#main-info h1{
+    font-family: beba;
+}
+
+#menu-flex{
+    padding-top: 3rem;
+}
+
+/*---------items and player---------*/
+
+
 #player{
-    width: 50%;
-    height: 50%;
+    width: 80%;
+    height: 80%;
     background-color: green;
     z-index: 2;
 }
 
-.things{
-    width: 50%;
-    height: 50%;
-}
+/*---------blocks---------*/
 
-#flex{
-    display: flex;
-}
-
-#thing{
-    width: 50%;
-    height: 50%;
-    background-color: rgb(0, 41, 128);
-    grid-column: 2;
-    grid-row: 2;
+.block{
+    width: 80%;
+    height: 80%;
 }
 
 /**********Imports**********/
+
+@font-face {
+    font-family: beba;
+    src: url(./imports/BebasNeue-Regular.ttf);
+}
 
 /**********Keyframes**********/
 

@@ -1,5 +1,6 @@
 let position = [2,2]//[row][column]
 let data
+let effekt = "normal";
 
 loadLevel(1)
 
@@ -59,31 +60,27 @@ function movePlayer(direction){
 
     player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
     console.log("coordinates: r:" + position[0] + " c:" + position[1]);
+
+    checkPosition();
 }
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
-    console.log("checkmove");
     if(data[nextY-1][nextX-1]){
-        console.log("existing");
         //Next Position is a Wall
         if(data[nextY-1][nextX-1].substr(0,2) == "wa"){
-            console.log("wall");
             return false;
         }
         //Next Position is a Button
         if(data[nextY-1][nextX-1].substr(0,2) == "bu"){
-            console.log("action")
             return true;
         }
         //Next Position is a Lever
         if(data[nextY-1][nextX-1].substr(0,2) == "le"){
-            console.log("action")
             return true;
         }
         //Next Position is a LockedItem
         if(data[nextY-1][nextX-1].substr(0,6) == "locked"){
-            console.log("Start MiniGame")
             return true;
         }
         //Next Position is a Trap
@@ -96,15 +93,44 @@ function checkMove(nextY, nextX){
             portale(nextY, nextX);
             return false;
         } 
+        //Next Position is a Softwall
+        if(data[nextY-1][nextX-1].substr(0,2) == "sw"){
+            if(effekt == "ghost"){
+                return true;
+            } else{
+                return false;
+            }
+        } 
+        return true;
     }
     else{ //feld ist leer - kann betreten werden
         return true;
     }
 }
 
+//Diese Funktion schaut ob ein Item auf dem Feld liegt
+function checkPosition(){
+    let posPlayer = data[position[0]-1][position[1]-1]
+    if(posPlayer){
+        if(posPlayer.substr(0,2) == "gh"){
+            ghost.parentNode.removeChild(ghost);
+            effekt = "ghost";
+            data[position[0]-1][position[1]-1] = "";
+
+            setTimeout(function(){
+                effekt = "normal"
+            }, 10000)
+
+            pickupPopup(position[0], position[1]);
+        }
+    }
+    console.log(effekt)
+
+    return effekt;
+}
+
 //Platziert alle Gegenstände auf dem Spiel
 function setTargets(){
-    console.log(data[1][1].substr(0,2))
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
@@ -117,6 +143,12 @@ function setTargets(){
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
                     case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="things"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
                 }

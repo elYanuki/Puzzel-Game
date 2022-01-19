@@ -1,7 +1,9 @@
 let position = [2,2]//[row][column]
 let data
 
-loadLevel(1)
+loadLevel(1);
+
+ fixPosition(data[data.length-1][0], data[data.length-1][1]);
 
 function loadLevel(index){
     switch (index){

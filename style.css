@@ -139,6 +139,10 @@ body{
     width: 80%;
     height: 80%;
 }
+.things{
+    width: 80%;
+    height: 80%;
+}
 
 /**********Imports**********/
 
@@ -146,7 +150,7 @@ body{
     font-family: beba;
     src: url(./imports/BebasNeue-Regular.ttf);
 }
-
+    
 /**********Keyframes**********/
 
 /**********Responsive**********/

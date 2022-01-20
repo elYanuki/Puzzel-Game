@@ -3,14 +3,12 @@ let data
 let effect = "normal"
 let eDown = false
 let noMove = false
+let level
+let player
 
-loadLevel(1)
-setElements();
-
-let player = document.getElementById("player")
-
-function loadLevel(index){
-    switch (index){
+function loadLevel(){
+    console.log(player);
+    switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
         case 3: data = lvl3();break;
@@ -28,6 +26,10 @@ function loadLevel(index){
         gridItems += " 1fr"
     }
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
+}
+
+function loadHtml(){
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
 }
 
 function movePlayer(direction){
@@ -62,7 +64,7 @@ function movePlayer(direction){
             break
     }
 
-
+    console.log("move");
     player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
     /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
 
@@ -170,7 +172,6 @@ function checkPosition(){
     else{
         clearInfoPopup()
     }
-    console.log(effect)
 
     return effect;
 }
@@ -275,7 +276,6 @@ function dead(){
     for (let i = 0; i < softwalls.length; i++) {
         softwalls[i].classList.remove("softwall-ghostmode")
     }
-    checkPosition()
 
     document.getElementById("countdown-text").innerHTML = ""
     document.getElementById("countdown").style = `animation-name: none;`
@@ -299,7 +299,7 @@ function dead(){
 
     setTimeout(function () {
         player.style.visibility = "visible"
-        loadLevel(1);
+        loadLevel();
     }, 1200)
 }
 

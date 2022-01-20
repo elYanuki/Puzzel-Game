@@ -10,18 +10,68 @@
     <script src='./js/blocks.js' ></script>
 </head>
 <body>
-    <div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div>
-    <div class="flex">
-    <main id="board">
-        <div id="player"></div> 
-        <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div>
-    </main>
-    <div id="handy">
-        <div id="game"></div>
-    </div>
-    <div id="settings">
-    </div>
-    <p onclick="loadLevel(1)">   button</p>
+    <div class="flex" id="menu-flex">
+        <main id="level-selector">
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 1</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 2</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 3</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 4</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 5</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 6</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 7</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 8</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+            <div onclick="level = 1;loadHtml(); loadLevel();setElements();player = document.getElementById('player')">
+                <p>Level 9</p>
+                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+            </div>
+        </main>
+        <main id="main-info">
+            <div>
+                <h1>Game Name</h1>
+                <p>Use W A S D or the arrow Keys to move arround. Press E or hold SPACE to interact with objects or Items.</p>
+            </div>
+            <div>
+                <h1>Objects and Items</h1>
+                <ul>
+                    <li>
+                        <h2>Wall</h2>
+                        <p>You shall not PAAASS</p>
+                    </li>
+                    <li>
+                        <h2>Trap</h2>
+                        <p>dangerous pointy spikes hurt</p>
+                    </li>
+                    <li>
+                        <h2>SoftWall</h2>
+                        <p>You shall pass, only if u r in the ghostmode tho</p>
+                    </li>
+                </ul>
+            </div>
+        </main>
     </div>
 </body>
 </html>

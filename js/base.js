@@ -7,7 +7,6 @@ let level
 let player
 
 function loadLevel(){
-    console.log(player);
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -64,7 +63,6 @@ function movePlayer(direction){
             break
     }
 
-    console.log("move");
     player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
     /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
 
@@ -125,9 +123,12 @@ function checkPosition(){
     if (posPlayer.substr(0, 2) == "sw" && effect != "ghost") {
         dead()
     }
-
-        if(posPlayer == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
+        if(posPlayer.substr(0, 2) == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
+            console.log("in if");
             createInfoPopup(position[0], position[1],);
+        }
+        else{
+            clearInfoPopup()
         }
         if (eDown == true) {
 
@@ -168,16 +169,12 @@ function checkPosition(){
             }
         
     }
-    else{
-        clearInfoPopup()
-    }
 
     return effect;
 }
 
 //Platziert alle Gegenstände auf dem Spiel
 function setElements(){
-    console.log(data[1][1].substr(0,2))
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
@@ -244,8 +241,7 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-    if (data    ) {
-        console.log(event.keyCode);
+    if (data) {
         switch (event.keyCode) {
             case 87:
             case 38:

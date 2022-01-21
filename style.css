@@ -80,17 +80,14 @@ body{
 /*---------main menu layout---------*/
 
 #level-selector{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     width: 40vw;
-    height: 40vw;
-    flex-wrap: wrap;
     height: fit-content;
-    justify-content: space-between;
+    gap: 1rem;
 }
 
 #level-selector div{
-    width: 30%;
-    height: 30%;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -105,7 +102,8 @@ body{
 }
 
 #level-selector div:hover p{
-    transform: translateY(-0.5rem);
+    transform: translateY(-0.4rem);
+    font-size: 2.7rem;
 }
 
 #level-selector div p{
@@ -114,7 +112,7 @@ body{
     color: white;
     z-index: 2;
     font-family: beba;
-    font-size: 2rem;
+    font-size: 2.5rem;
     text-shadow: 0 0 1.5qrem black;
     transition: all 0.4s;
 }
@@ -134,7 +132,7 @@ body{
 
 #main-info div{
     background-color: rgb(78, 78, 78);
-    margin: 0.5rem;
+    margin-bottom: 1rem;
     padding: 1rem;
     box-sizing: border-box;
 }
@@ -236,7 +234,7 @@ body{
 
 .softwall-ghostmode{
     background-color: rgba(47, 129, 236, 0.2);
-    border: 0.1rem black dashed;
+    border: 0.17vw black dashed;
 }
 
 /**********Imports**********/

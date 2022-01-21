@@ -40,11 +40,22 @@ body{
 }
 
 #handy{
+    display: grid;
+
+    grid-auto-columns: 4.5vh;
+    grid-auto-rows: 4.5vh;
+
+    background-color: rgb(39, 39, 39);
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
     height: 90vh;
     margin: 5vh 5vh 5vh 0vh;
-    border-radius: 0 2vw 2vw 0;
+    justify-content: center;
+    transition: all 0.5s ease-in;
+}
+#handy h1, #handy h2{
+    color: rgb(195, 195, 195);
+    padding: 0.5vh;
 }
 #settings{
     border: rgb(195, 195, 195) 2px solid;
@@ -237,6 +248,13 @@ body{
 .softwall-ghostmode{
     background-color: rgba(47, 129, 236, 0.2);
     border: 0.17vw black dashed;
+}
+
+/*---------fields---------*/
+
+.fields{
+    width: 80%;
+    height: 80%;
 }
 
 /**********Imports**********/

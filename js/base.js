@@ -30,6 +30,8 @@ function loadLevel(index){
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
 }
 
+
+
 function movePlayer(direction){
     let move = false;
     let pos0 = position[0]
@@ -198,6 +200,9 @@ function setElements(){
                     case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
+                    case("bu"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 255, 255);" class="things"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
                 }
             }
         }
@@ -241,20 +246,21 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-        switch(event.key){
-            case 'w':
-            case 'ArrowUp':
+    console.log(event.keyCode);
+        switch(event.keyCode){
+            case 87:
+            case 38:
             case 'W': movePlayer(0);break;
-            case 's':
-            case 'ArrowDown':
+            case 83:
+            case 40:
             case 'S': movePlayer(1);break;
-            case 'a':
-            case 'ArrowLeft':
+            case 65:
+            case 37:
             case 'A': movePlayer(2);break;
-            case 'd':
-            case 'ArrowRight':
+            case 68:
+            case 39:
             case 'D': movePlayer(3);break;
-            case 'e':   
+            case 69:   
             case 'E': eDown = true; checkPosition();break
     }
 });
@@ -308,4 +314,4 @@ function SetPlayerPos(row,column){
     position[1] = column
     
     player.style = `grid-area: ${row} / ${column} / auto / auto;`
-}
+    }

@@ -126,16 +126,15 @@ function checkPosition(){
         dead()
     }
 
-    if(posPlayer == "gh"){ //muss alle eigenschafften haben damit man nicht in der softwall ein popup bekommt
-
-        createInfoPopup(position[0], position[1],);
-
+        if(posPlayer == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
+            createInfoPopup(position[0], position[1],);
+        }
         if (eDown == true) {
 
             clearInfoPopup() //e sorgt ja für den pickup
 
             if (posPlayer.substr(0, 2) == "gh") {
-                let ghost = document.getElementById("ghost")
+                let ghost = document.getElementById(`ghost-${posPlayer.substr(3,1)}`)
                 ghost.style.width = 0
                 ghost.style.height = 0
 
@@ -167,7 +166,7 @@ function checkPosition(){
                     checkPosition()
                 }, 10000)
             }
-        }
+        
     }
     else{
         clearInfoPopup()
@@ -196,7 +195,10 @@ function setElements(){
                     case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="softwall"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
+                                    //thing.style = `backgroundImage: url(block.png);`  
+                                    break;
+                    case("bu"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 255, 255);" class="things"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
                 }
@@ -242,21 +244,24 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-        switch(event.key){
-            case 'w':
-            case 'ArrowUp':
-            case 'W': movePlayer(0);break;
-            case 's':
-            case 'ArrowDown':
-            case 'S': movePlayer(1);break;
-            case 'a':
-            case 'ArrowLeft':
-            case 'A': movePlayer(2);break;
-            case 'd':
-            case 'ArrowRight':
-            case 'D': movePlayer(3);break;
-            case 'e':   
-            case 'E': eDown = true; checkPosition();break
+    if (data    ) {
+        console.log(event.keyCode);
+        switch (event.keyCode) {
+            case 87:
+            case 38:
+            case 'W': movePlayer(0); break;
+            case 83:
+            case 40:
+            case 'S': movePlayer(1); break;
+            case 65:
+            case 37:
+            case 'A': movePlayer(2); break;
+            case 68:
+            case 39:
+            case 'D': movePlayer(3); break;
+            case 69:
+            case 'E': eDown = true; checkPosition(); break
+        }
     }
 });
 
@@ -308,4 +313,4 @@ function SetPlayerPos(row,column){
     position[1] = column
     
     player.style = `grid-area: ${row} / ${column} / auto / auto;`
-}
+    }

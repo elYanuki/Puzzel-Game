@@ -163,6 +163,7 @@ body{
     background-color: green;
     z-index: 2;
     transition: width 0.2s, height 0.2s, opacity 0.5s;
+    user-select: none;
 }
 
 .player-ghostmode{
@@ -226,6 +227,7 @@ body{
 .block{
     width: 80%;
     height: 80%;
+    user-select: none;
 }
 
 .softwall{

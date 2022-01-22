@@ -3,7 +3,7 @@ function trap(){
     console.log("You dead");
 }
 
-function portale(nextY, nextX){
+function portal(nextY, nextX){
     noMove = true
     setTimeout(function () {
         player.style.width = "90%"

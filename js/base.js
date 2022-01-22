@@ -98,7 +98,7 @@ function checkMove(nextY, nextX){
         } 
         //Next Position is a Portal
         if(data[nextY-1][nextX-1].substr(0,2) == "po"){
-            portale(nextY, nextX);
+            portal(nextY, nextX);
             return true;
         } 
         //Next Position is a Softwall

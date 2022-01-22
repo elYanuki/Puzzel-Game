@@ -29,6 +29,12 @@ function loadLevel(){
 
 function loadHtml(){
     document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
+
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    var date = today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
+    
+    document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>`
 }
 
 function movePlayer(direction){
@@ -87,10 +93,6 @@ function checkMove(nextY, nextX){
         if(data[nextY-1][nextX-1].substr(0,2) == "le"){
             return true;
         }
-        //Next Position is a LockedItem
-        if(data[nextY-1][nextX-1].substr(0,6) == "locked"){
-            return true;
-        }
         //Next Position is a Trap
         if(data[nextY-1][nextX-1].substr(0,2) == "tr"){
             trap();
@@ -119,6 +121,16 @@ function checkMove(nextY, nextX){
 //schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
 function checkPosition(){
     let posPlayer = data[position[0]-1][position[1]-1]
+
+    //Position Item is locked
+    if(posPlayer.substr(0, 2) == "lo"){
+        createInfoPopup(position[0], position[1],)
+        if(eDown == true){
+            clearInfoPopup();
+            loadHandy(posPlayer);
+        }
+        return true;
+    }
 
     if (posPlayer.substr(0, 2) == "sw" && effect != "ghost") {
         dead()
@@ -195,7 +207,7 @@ function setElements(){
                     case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
-                    case("bu"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 255, 255);" class="things"></div>`
+                    case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="softwall"></div>`
                                     //thing.style = `backgroundImage: url(block.png);`  
                                     break;
                 }

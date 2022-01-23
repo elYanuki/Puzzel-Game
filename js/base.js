@@ -6,6 +6,7 @@ let noMove = false
 let level
 let player
 let keydown
+let posPlayer
 
 function loadLevel(){
     switch (level){
@@ -39,6 +40,7 @@ function loadHtml(){
 }
 
 function movePlayer(){
+    console.log("movepl");
     let move = false;
     let pos0 = position[0]
     let pos1 = position[1]
@@ -92,108 +94,72 @@ function checkMove(nextY, nextX){
         return false
     }
     else if(data[nextY-1][nextX-1]){
-        //Next Position is a Wall
-        if(data[nextY-1][nextX-1].substr(0,2) == "wa"){
-            return false;
-        }
-        //Next Position is a Button
-        if(data[nextY-1][nextX-1].substr(0,2) == "bu"){
-            return true;
-        }
-        //Next Position is a Lever
-        if(data[nextY-1][nextX-1].substr(0,2) == "le"){
-            return true;
-        }
-        //Next Position is a Trap
-        if(data[nextY-1][nextX-1].substr(0,2) == "tr"){
-            trap();
-            return true;
-        } 
-        //Next Position is a Portal
-        if(data[nextY-1][nextX-1].substr(0,2) == "po"){
-            portal(nextY, nextX);
-            return true;
-        } 
-        //Next Position is a Softwall
-        if(data[nextY-1][nextX-1].substr(0,2) == "sw"){
-            if(effect == "ghost"){
-                return true;
-            } else{
+        switch (data[nextY-1][nextX-1].substr(0,2)){
+            case "wa": //wall
                 return false;
-            }
-        } 
-        return true;
+                break
+            case "bu": //button
+                return true;
+                break
+            case "le": //lever
+                return true;
+                break
+            case "tr": //trap
+                trap();
+                return true;
+                break
+            case "po": //portal
+                portal(nextY, nextX);
+                return true;
+                break
+            case "sw": //softwall
+                if(effect == "ghost"){
+                    return true;
+                } else{
+                    return false;
+                }
+                break
+            case "tw": //idk
+                return true;
+                break
+            default: //feld ist ghost etc.
+                return true;
+                break
+        }
     }
     else{ //feld ist leer - kann betreten werden
-        return true;
+        return true
     }
 }
 
 //schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
 function checkPosition(){
-    let posPlayer = data[position[0]-1][position[1]-1]
+    posPlayer = data[position[0]-1][position[1]-1].substr(0, 2)
 
-    //Position Item is locked
-    if(posPlayer.substr(0, 2) == "lo"){
-        createInfoPopup(position[0], position[1],)
-        if(eDown == true){
-            clearInfoPopup();
-            loadHandy(posPlayer);
-        }
-        return true;
-    }
-
-    if (posPlayer.substr(0, 2) == "sw" && effect != "ghost") {
-        dead()
-    }
-        if(posPlayer.substr(0, 2) == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
-            console.log("in if");
-            createInfoPopup(position[0], position[1],);
-        }
-        else{
-            clearInfoPopup()
-        }
-        if (eDown == true) {
-
-            clearInfoPopup() //e sorgt ja für den pickup
-
-            if (posPlayer.substr(0, 2) == "gh") {
-                let ghost = document.getElementById(`ghost-${posPlayer.substr(3,1)}`)
-                ghost.style.width = 0
-                ghost.style.height = 0
-
-                setTimeout(function () {
-                    ghost.parentNode.removeChild(ghost);        
-                }, 500)
-
-                effect = "ghost";
-                data[position[0] - 1][position[1] - 1] = "";
-
-                let softwalls = document.getElementsByClassName("softwall")
-
-                player.classList.add("player-ghostmode")
-
-                for (let i = 0; i < softwalls.length; i++) {
-                    softwalls[i].classList.add("softwall-ghostmode")
-                }
-
-                countdown(10, "Ghost")
-
-                setTimeout(function () {
-                    effect = "normal"
-
-                    player.classList.remove("player-ghostmode")
-
-                    for (let i = 0; i < softwalls.length; i++) {
-                        softwalls[i].classList.remove("softwall-ghostmode")
-                    }
-                    checkPosition()
-                }, 10000)
+    switch(posPlayer){
+        case "lo": 
+            createInfoPopup(position[0], position[1],)
+            if (eDown == true) {
+                clearInfoPopup();
+                loadHandy(posPlayer);
             }
-        
+            return true;
+            break;
+        case "tw":
+            tempwall()
+            break;
+        case "gh":
+            ghostItem()
+            break;
+        case "sw":
+            if(effect != "ghost"){
+                dead()
+                }
+        default:
+            clearInfoPopup()
+            break
     }
-
-    return effect;
+    //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
 //Platziert alle Gegenstände auf dem Spiel
@@ -203,23 +169,26 @@ function setElements(){
             if(data[i][j]){
                 let sub = data[i][j].substr(0,2)
                 switch(sub){
-                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //wall
+                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="block"></div>`  
                                     break;
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //trap
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  
                                     break;
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //portal
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
                                     break;
-                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="softwall"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //softwall
+                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //ghost
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`  
                                     break;
-                    case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="softwall"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //lever?
+                    case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
+                                    break;
+                    //temp wall
+                    case ("tw"): document.getElementById("board").innerHTML += `<div id="tempwall-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(196, 166, 0);" class="block tempwall"></div>`  
                                     break;
                 }
             }

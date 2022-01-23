@@ -244,7 +244,7 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-    if (data    ) {
+    if (data) {
         console.log(event.keyCode);
         switch (event.keyCode) {
             case 87:

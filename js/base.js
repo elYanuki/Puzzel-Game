@@ -5,9 +5,10 @@ let eDown = false
 let noMove = false
 let level
 let player
+let keydown
+let posPlayer
 
 function loadLevel(){
-    console.log(player);
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -29,19 +30,28 @@ function loadLevel(){
 }
 
 function loadHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
+
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    var date = today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
+    
+    document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>`
 }
 
-function movePlayer(direction){
+function movePlayer(){
+    console.log("movepl");
     let move = false;
     let pos0 = position[0]
     let pos1 = position[1]
+    let playerSprite = document.getElementById("player-sprite")
 
-    switch (direction){
+    switch (keydown){
         case 0: //up w
-            move = checkMove(--pos0, pos1);
+            move = checkMove(Math.max(--pos0, 1), pos1);
             if(move == true){
                 position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
+                /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
             }   
             break
         case 1: //down s
@@ -63,12 +73,19 @@ function movePlayer(direction){
             }   
             break
     }
+    setTimeout(function () {
+    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+    }, 5);
 
-    console.log("move");
-    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
+    /* setTimeout(function () {
+        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+        playerSprite.style = "transition: none;transform: translateY(0rem);"
+    }, 500) */
+    
     /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
 
     checkPosition();
+    /* setTimeout(movePlayer, 50); // async recursion */
 }
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
@@ -77,134 +94,107 @@ function checkMove(nextY, nextX){
         return false
     }
     else if(data[nextY-1][nextX-1]){
-        //Next Position is a Wall
-        if(data[nextY-1][nextX-1].substr(0,2) == "wa"){
-            return false;
-        }
-        //Next Position is a Button
-        if(data[nextY-1][nextX-1].substr(0,2) == "bu"){
-            return true;
-        }
-        //Next Position is a Lever
-        if(data[nextY-1][nextX-1].substr(0,2) == "le"){
-            return true;
-        }
-        //Next Position is a LockedItem
-        if(data[nextY-1][nextX-1].substr(0,6) == "locked"){
-            return true;
-        }
-        //Next Position is a Trap
-        if(data[nextY-1][nextX-1].substr(0,2) == "tr"){
-            trap();
-            return true;
-        } 
-        //Next Position is a Portal
-        if(data[nextY-1][nextX-1].substr(0,2) == "po"){
-            portale(nextY, nextX);
-            return true;
-        } 
-        //Next Position is a Softwall
-        if(data[nextY-1][nextX-1].substr(0,2) == "sw"){
-            if(effect == "ghost"){
-                return true;
-            } else{
+        switch (data[nextY-1][nextX-1].substr(0,2)){
+            case "wa": //wall
                 return false;
-            }
-        } 
-        return true;
+                break
+            case "bu": //button
+                return true;
+                break
+            case "le": //lever
+                return true;
+                break
+            case "tr": //trap
+                trap();
+                return true;
+                break
+            case "po": //portal
+                portal(nextY, nextX);
+                return true;
+                break
+            case "sw": //softwall
+                if(effect == "ghost"){
+                    return true;
+                } else{
+                    return false;
+                }
+                break
+            case "tw": //idk
+                return true;
+                break
+            default: //feld ist ghost etc.
+                return true;
+                break
+        }
     }
     else{ //feld ist leer - kann betreten werden
-        return true;
+        return true
     }
 }
 
 //schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
 function checkPosition(){
-    let posPlayer = data[position[0]-1][position[1]-1]
+    posPlayer = data[position[0]-1][position[1]-1].substr(0, 2)
 
-    if (posPlayer.substr(0, 2) == "sw" && effect != "ghost") {
-        dead()
-    }
-
-        if(posPlayer == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
-            createInfoPopup(position[0], position[1],);
-        }
-        if (eDown == true) {
-
-            clearInfoPopup() //e sorgt ja für den pickup
-
-            if (posPlayer.substr(0, 2) == "gh") {
-                let ghost = document.getElementById(`ghost-${posPlayer.substr(3,1)}`)
-                ghost.style.width = 0
-                ghost.style.height = 0
-
-                setTimeout(function () {
-                    ghost.parentNode.removeChild(ghost);        
-                }, 500)
-
-                effect = "ghost";
-                data[position[0] - 1][position[1] - 1] = "";
-
-                let softwalls = document.getElementsByClassName("softwall")
-
-                player.classList.add("player-ghostmode")
-
-                for (let i = 0; i < softwalls.length; i++) {
-                    softwalls[i].classList.add("softwall-ghostmode")
-                }
-
-                countdown(10, "Ghost")
-
-                setTimeout(function () {
-                    effect = "normal"
-
-                    player.classList.remove("player-ghostmode")
-
-                    for (let i = 0; i < softwalls.length; i++) {
-                        softwalls[i].classList.remove("softwall-ghostmode")
-                    }
-                    checkPosition()
-                }, 10000)
+    switch(posPlayer){
+        case "lo": 
+            createInfoPopup(position[0], position[1],)
+            if (eDown == true) {
+                clearInfoPopup();
+                loadHandy(posPlayer);
             }
-        
+            return true;
+            break;
+        case "tw":
+            tempwall()
+            break;
+        case "gh":
+            ghostItem()
+            break;
+        case "sw":
+            if(effect != "ghost"){
+                dead()
+                }
+        default:
+            clearInfoPopup()
+            break
     }
-    else{
-        clearInfoPopup()
-    }
-
-    return effect;
+    //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
 //Platziert alle Gegenstände auf dem Spiel
 function setElements(){
-    console.log(data[1][1].substr(0,2))
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
                 let sub = data[i][j].substr(0,2)
                 switch(sub){
-                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //wall
+                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="block"></div>`  
                                     break;
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //trap
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  
                                     break;
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //portal
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
                                     break;
-                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="softwall"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //softwall
+                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //ghost
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`  
                                     break;
-                    case("bu"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 255, 255);" class="things"></div>`
-                                    //thing.style = `backgroundImage: url(block.png);`  
+                    //lever?
+                    case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
+                                    break;
+                    //temp wall
+                    case ("tw"): document.getElementById("board").innerHTML += `<div id="tempwall-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(196, 166, 0);" class="block tempwall"></div>`  
                                     break;
                 }
             }
         }
     }
+    movePlayer()
 }
 
 function createInfoPopup(x,y,text) {
@@ -249,27 +239,42 @@ document.addEventListener('keydown', function(event) {
         switch (event.keyCode) {
             case 87:
             case 38:
-            case 'W': movePlayer(0); break;
+            case 'W': keydown = 0; movePlayer(); break;
             case 83:
             case 40:
-            case 'S': movePlayer(1); break;
+            case 'S': keydown = 1; movePlayer();break;
             case 65:
             case 37:
-            case 'A': movePlayer(2); break;
+            case 'A': keydown = 2; movePlayer();break;
             case 68:
             case 39:
-            case 'D': movePlayer(3); break;
+            case 'D': keydown = 3; movePlayer();break;
             case 69:
             case 'E': eDown = true; checkPosition(); break
         }
     }
 });
 
-document.addEventListener('keyup',function(event) {
-    switch(event.key){
-        case 'e': eDown = false;break
-}
-});
+    document.addEventListener('keyup', function(event) {
+        if (data) {
+            switch (event.keyCode) {
+                case 87:
+                case 38:
+                case 'W': keydown = ""; break;
+                case 83:
+                case 40:
+                case 'S': keydown = ""; break;
+                case 65:
+                case 37:
+                case 'A': keydown = ""; break;
+                case 68:
+                case 39:
+                case 'D': keydown = ""; break;
+                case 69:
+                case 'E': eDown = false; checkPosition(); break
+            }
+        }
+    });
 
 function dead(){
     effect = "normal"

@@ -3,7 +3,7 @@ function trap(){
     console.log("You dead");
 }
 
-function portale(nextY, nextX){
+function portal(nextY, nextX){
     noMove = true
     setTimeout(function () {
         player.style.width = "90%"
@@ -22,4 +22,77 @@ function portale(nextY, nextX){
     player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
     }, 400)
     noMove = false
+}
+
+function tempwall(){
+    let tempwallLivetime = 1000
+    let tempwallDowntime = 1300
+
+    let thisWall = document.getElementById(`tempwall-${data[position[0]-1][position[1]-1].substr(3,2)}`)
+    thisWall.style.animationPlayState = "running"
+
+    setTimeout(function(){
+        thisWall.style.width = "0"
+        thisWall.style.height = "0"
+    },tempwallLivetime)
+
+    setTimeout(function(){
+        if(data[position[0]-1][position[1]-1].substr(0, 2) == "tw"){
+            dead();
+        }
+    },tempwallLivetime+500)
+
+    setTimeout(function(){
+        thisWall.style.animationPlayState = "paused"
+        thisWall.style.width = "80%"
+        thisWall.style.height = "80%"
+
+    },tempwallLivetime+500+tempwallDowntime)
+}
+
+function ghostItem(){
+        if(posPlayer.substr(0, 2) == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
+            createInfoPopup(position[0], position[1],);
+        }
+        if (eDown == true) {
+
+            clearInfoPopup() //e sorgt ja für den pickup
+
+            if (posPlayer.substr(0, 2) == "gh") {
+                let ghost = document.getElementById(`ghost-${data[position[0]-1][position[1]-1].substr(3,1)}`)
+                killBlock(ghost)
+                effect = "ghost";
+                data[position[0] - 1][position[1] - 1] = "";
+
+                let softwalls = document.getElementsByClassName("softwall")
+
+                player.classList.add("player-ghostmode")
+
+                for (let i = 0; i < softwalls.length; i++) {
+                    softwalls[i].classList.add("softwall-ghostmode")
+                }
+
+                countdown(10, "Ghost")
+
+                setTimeout(function () {
+                    effect = "normal"
+
+                    player.classList.remove("player-ghostmode")
+
+                    for (let i = 0; i < softwalls.length; i++) {
+                        softwalls[i].classList.remove("softwall-ghostmode")
+                    }
+                    checkPosition()
+                }, 10000)
+            }
+        }
+        return effect;
+}
+
+function killBlock(block){
+    block.style.width = 0
+    block.style.height = 0
+    setTimeout(function () {
+        block.parentNode.removeChild(block);
+    }, 500)
 }

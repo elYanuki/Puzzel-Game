@@ -5,6 +5,7 @@ let eDown = false
 let noMove = false
 let level
 let player
+let keydown
 
 function loadLevel(){
     switch (level){
@@ -28,7 +29,7 @@ function loadLevel(){
 }
 
 function loadHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
 
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes();
@@ -37,16 +38,18 @@ function loadHtml(){
     document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>`
 }
 
-function movePlayer(direction){
+function movePlayer(){
     let move = false;
     let pos0 = position[0]
     let pos1 = position[1]
+    let playerSprite = document.getElementById("player-sprite")
 
-    switch (direction){
+    switch (keydown){
         case 0: //up w
-            move = checkMove(--pos0, pos1);
+            move = checkMove(Math.max(--pos0, 1), pos1);
             if(move == true){
                 position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
+                /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
             }   
             break
         case 1: //down s
@@ -68,11 +71,19 @@ function movePlayer(direction){
             }   
             break
     }
+    setTimeout(function () {
+    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+    }, 5);
 
-    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
+    /* setTimeout(function () {
+        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+        playerSprite.style = "transition: none;transform: translateY(0rem);"
+    }, 500) */
+    
     /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
 
     checkPosition();
+    /* setTimeout(movePlayer, 50); // async recursion */
 }
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
@@ -214,6 +225,7 @@ function setElements(){
             }
         }
     }
+    movePlayer()
 }
 
 function createInfoPopup(x,y,text) {
@@ -257,27 +269,42 @@ document.addEventListener('keydown', function(event) {
         switch (event.keyCode) {
             case 87:
             case 38:
-            case 'W': movePlayer(0); break;
+            case 'W': keydown = 0; movePlayer(); break;
             case 83:
             case 40:
-            case 'S': movePlayer(1); break;
+            case 'S': keydown = 1; movePlayer();break;
             case 65:
             case 37:
-            case 'A': movePlayer(2); break;
+            case 'A': keydown = 2; movePlayer();break;
             case 68:
             case 39:
-            case 'D': movePlayer(3); break;
+            case 'D': keydown = 3; movePlayer();break;
             case 69:
             case 'E': eDown = true; checkPosition(); break
         }
     }
 });
 
-document.addEventListener('keyup',function(event) {
-    switch(event.key){
-        case 'e': eDown = false;break
-}
-});
+    document.addEventListener('keyup', function(event) {
+        if (data) {
+            switch (event.keyCode) {
+                case 87:
+                case 38:
+                case 'W': keydown = ""; break;
+                case 83:
+                case 40:
+                case 'S': keydown = ""; break;
+                case 65:
+                case 37:
+                case 'A': keydown = ""; break;
+                case 68:
+                case 39:
+                case 'D': keydown = ""; break;
+                case 69:
+                case 'E': eDown = false; checkPosition(); break
+            }
+        }
+    });
 
 function dead(){
     effect = "normal"

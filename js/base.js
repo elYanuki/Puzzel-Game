@@ -168,6 +168,7 @@ function checkPosition(){
 
 //Platziert alle Gegenstände auf dem Spiel
 function setElements(){
+    let last = false
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
@@ -175,21 +176,39 @@ function setElements(){
                 let rotateRNG = Math.random()
                 let sub = data[i][j].substr(0,2)
                 let back
-                let rotate
+                if(rotateRNG <0.25){
+                    rotateRNG = 90
+                }
+                else if(rotateRNG <0.50){
+                    rotateRNG = 180
+                }
+                else if(rotateRNG <0.75){
+                    rotateRNG = 270
+                }
+                else{
+                    rotateRNG = 0
+                }
+
                 switch(sub){
                     //wall
                     case ("wa"): 
                         if(chooseRNG<0.5){
-                            back = "bush"
+                            back = "bush_v2"
                         }
                         else{
-                            back= "bush_rose"
+                            if(last == true){
+                                back = "bush_v2"
+                                last = false
+                            }
+                            else{
+                            last = true
+                            back= "bush_v2_berry"
+                            }
                         }
-                        rotate *= 4
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); rotation:${rotate}" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); rotate:${rotateRNG}deg" class="block"></div>`
                                     break;
                     //trap
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
                                     break;
                     //portal
                     case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
@@ -198,7 +217,7 @@ function setElements(){
                     case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png)" class="block ghost"></div>`  
                                     break;
                     //lever?
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  

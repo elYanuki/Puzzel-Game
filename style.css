@@ -246,6 +246,10 @@ body{
     transition: all 0.5s;
 }
 
+.ghost{
+    background-size: 60%;
+}
+
 /*---------blocks---------*/
 
 .block{
@@ -253,7 +257,9 @@ body{
     height: 100%;
     user-select: none;
     transition: all 500ms;
-    background-size: cover;
+    background-size: 100%;
+    overflow:visible;
+    /* box-shadow: 0 0 0.4rem black; */
 }
 
 .softwall{

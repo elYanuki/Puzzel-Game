@@ -40,7 +40,7 @@ function loadHtml(){
 }
 
 function movePlayer(){
-    console.log("movepl");
+    /* checkPosition(); */
     let move = false;
     let pos0 = position[0]
     let pos1 = position[1]
@@ -146,6 +146,9 @@ function checkPosition(){
             return true;
             break;
         case "tw":
+            if(data[position[0]-1][position[1]-1].substr(5,2) == "kill"){
+                dead()
+            }
             tempwall()
             break;
         case "gh":
@@ -159,6 +162,7 @@ function checkPosition(){
             clearInfoPopup()
             break
     }
+    console.log(data[position[0]-1][position[1]-1])
     //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
@@ -188,7 +192,7 @@ function setElements(){
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
-                    case ("tw"): document.getElementById("board").innerHTML += `<div id="tempwall-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(196, 166, 0);" class="block tempwall"></div>`  
+                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: rgb(196, 166, 0);" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
                 }
             }

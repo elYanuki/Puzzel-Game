@@ -171,10 +171,22 @@ function setElements(){
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
+                let chooseRNG = Math.random()
+                let rotateRNG = Math.random()
                 let sub = data[i][j].substr(0,2)
+                let back
+                let rotate
                 switch(sub){
                     //wall
-                    case ("wa"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 41, 128);" class="block"></div>`  
+                    case ("wa"): 
+                        if(chooseRNG<0.5){
+                            back = "bush"
+                        }
+                        else{
+                            back= "bush_rose"
+                        }
+                        rotate *= 4
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); rotation:${rotate}" class="block"></div>`
                                     break;
                     //trap
                     case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  

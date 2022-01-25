@@ -26,27 +26,29 @@ function portal(nextY, nextX){
 
 function tempwall(){
     let tempwallLivetime = 1000
-    let tempwallDowntime = 1300
+    let tempwallDowntime = 1500 //immer nur in 300er schitten ändern wegen animation
 
     let thisWall = document.getElementById(`tempwall-${data[position[0]-1][position[1]-1].substr(3,2)}`)
     thisWall.style.animationPlayState = "running"
 
     setTimeout(function(){
-        thisWall.style.width = "0"
-        thisWall.style.height = "0"
+        thisWall.style.width = "0%"
+        thisWall.style.height = "0%"
     },tempwallLivetime)
 
     setTimeout(function(){
         if(data[position[0]-1][position[1]-1].substr(0, 2) == "tw"){
             dead();
         }
-    },tempwallLivetime+500)
+        console.log(data[position[0]-1][position[1]-1]);
+        data[position[0]-1][position[1]-1] += `-kill`
+    },tempwallLivetime+500) //+animation time
 
     setTimeout(function(){
         thisWall.style.animationPlayState = "paused"
-        thisWall.style.width = "80%"
-        thisWall.style.height = "80%"
-
+        thisWall.style.width = "100%"
+        thisWall.style.height = "100%"
+        data[position[0]-1][position[1]-1] = data[position[0]-1][position[1]-1].substr(0,5)
     },tempwallLivetime+500+tempwallDowntime)
 }
 

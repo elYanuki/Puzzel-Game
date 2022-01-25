@@ -315,7 +315,14 @@ p{
 }
 
 .ghost{
-    background-size: 60%;
+    background-size: 60% !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation-name: ghost-idel;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-timing-function:linear;
 }
 
 /*---------blocks---------*/
@@ -439,6 +446,24 @@ p{
         margin-left: 0;
     }
 }
+
+    @keyframes ghost-idel {
+        0%{
+            transform: rotate(-5deg) translateY(0rem);
+        }
+        25%{
+            transform: rotate(5deg) translateY(-0.25rem);
+        }
+        50%{
+            transform: rotate(-5deg) translateY(-0.5rem);
+        }
+        75%{
+            transform: rotate(5deg) translateY(-0.25rem);
+        }
+        100%{
+            transform: rotate(-5deg) translateY(0rem);
+        }
+    }
 /**********Responsive**********/
 
 /**********Variables**********/

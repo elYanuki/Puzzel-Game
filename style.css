@@ -42,10 +42,7 @@ body{
 #handy{
     display: grid;
 
-    grid-auto-columns: 4.5vh;
-    grid-auto-rows: 4.5vh;
-
-    background-color: rgb(39, 39, 39);
+    background-image: url(./img/background.png);
     border: rgb(195, 195, 195) 2px solid;
     width: 45vh;
     height: 90vh;
@@ -272,6 +269,8 @@ body{
 .fields{
     width: 80%;
     height: 80%;
+    align-items: center;
+    justify-items: center;
 }
 
 /**********Imports**********/

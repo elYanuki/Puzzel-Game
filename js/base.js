@@ -40,52 +40,69 @@ function loadHtml(){
 }
 
 function movePlayer(){
-    console.log("movepl");
-    let move = false;
-    let pos0 = position[0]
-    let pos1 = position[1]
-    let playerSprite = document.getElementById("player-sprite")
-
-    switch (keydown){
-        case 0: //up w
-            move = checkMove(Math.max(--pos0, 1), pos1);
-            if(move == true){
-                position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
-                /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
-            }   
-            break
-        case 1: //down s
-            move = checkMove(++pos0, pos1);
-            if(move == true){
-                position[0] = Math.min(++position[0], data[1].length)
-            }
-            break
-        case 2: //left a
-            move = checkMove(pos0, --pos1)
-            if(move == true){
-                position[1] = Math.max(--position[1], 1)
-            }          
-            break
-        case 3: //right d 
-            move = checkMove(pos0, ++pos1)
-            if(move == true){
-                position[1] = Math.min(++position[1], data[1].length)
-            }   
-            break
-    }
-    setTimeout(function () {
-    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-    }, 5);
-
-    /* setTimeout(function () {
-        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-        playerSprite.style = "transition: none;transform: translateY(0rem);"
-    }, 500) */
+    if(effect == "handy"){
+        switch (keydown){
+            case 0: //up w
+                direction("w");
+                break
+            case 1: //down s
+                direction("s")
+                break
+            case 2: //left a
+                direction("a")
+                break
+            case 3: //right d 
+                direction("d")
+                break
+        }
+    } else{
+        console.log("movepl");
+        let move = false;
+        let pos0 = position[0]
+        let pos1 = position[1]
+        let playerSprite = document.getElementById("player-sprite")
     
-    /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
-
-    checkPosition();
-    /* setTimeout(movePlayer, 50); // async recursion */
+        switch (keydown){
+            case 0: //up w
+                move = checkMove(Math.max(--pos0, 1), pos1);
+                if(move == true){
+                    position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
+                    /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
+                }   
+                break
+            case 1: //down s
+                move = checkMove(++pos0, pos1);
+                if(move == true){
+                    position[0] = Math.min(++position[0], data[1].length)
+                }
+                break
+            case 2: //left a
+                move = checkMove(pos0, --pos1)
+                if(move == true){
+                    position[1] = Math.max(--position[1], 1)
+                }          
+                break
+            case 3: //right d 
+                move = checkMove(pos0, ++pos1)
+                if(move == true){
+                    position[1] = Math.min(++position[1], data[1].length)
+                }   
+                break
+        }
+        setTimeout(function () {
+        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+        }, 5);
+    
+        /* setTimeout(function () {
+            player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+            playerSprite.style = "transition: none;transform: translateY(0rem);"
+        }, 500) */
+        
+        /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
+    
+        checkPosition();
+        /* setTimeout(movePlayer, 50); // async recursion */
+    }
 }
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
@@ -133,18 +150,20 @@ function checkMove(nextY, nextX){
 }
 
 //schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
+let active = false;
 function checkPosition(){
-    posPlayer = data[position[0]-1][position[1]-1].substr(0, 2)
-
-    switch(posPlayer){
+    posPlayer = data[position[0]-1][position[1]-1];
+    switch(posPlayer.substr(0,2)){
         case "lo": 
-            createInfoPopup(position[0], position[1],)
             if (eDown == true) {
+                effect = "handy";
                 clearInfoPopup();
                 loadHandy(posPlayer);
+                active = true;
+            } else if(active == false){
+                createInfoPopup(position[0], position[1],)
             }
             return true;
-            break;
         case "tw":
             tempwall()
             break;

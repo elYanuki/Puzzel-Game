@@ -41,14 +41,12 @@ function tempwall(){
             dead();
         }
         console.log(data[position[0]-1][position[1]-1]);
-        data[position[0]-1][position[1]-1] += `-kill`
     },tempwallLivetime+500) //+animation time
 
     setTimeout(function(){
         thisWall.style.animationPlayState = "paused"
         thisWall.style.width = "100%"
         thisWall.style.height = "100%"
-        data[position[0]-1][position[1]-1] = data[position[0]-1][position[1]-1].substr(0,5)
     },tempwallLivetime+500+tempwallDowntime)
 }
 
@@ -64,7 +62,7 @@ function ghostItem(){
                 let ghost = document.getElementById(`ghost-${data[position[0]-1][position[1]-1].substr(3,1)}`)
                 killBlock(ghost)
                 effect = "ghost";
-                data[position[0] - 1][position[1] - 1] = "";
+                data[position[0] - 1][position[1] - 1] = "-";
 
                 let softwalls = document.getElementsByClassName("softwall")
 

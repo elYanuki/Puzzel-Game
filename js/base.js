@@ -22,7 +22,7 @@ function loadLevel(){
     document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
     position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
 
-    let gridItems = ""
+    let gridItems = "1fr"
     for (let i = 0; i < data.length-2; i++) { //lässt breite des array die breite des grid bestimmen
         gridItems += " 1fr"
     }
@@ -165,9 +165,6 @@ function checkPosition(){
             }
             return true;
         case "tw":
-            if(data[position[0]-1][position[1]-1].substr(5,2) == "kill"){
-                dead()
-            }
             tempwall()
             break;
         case "gh":
@@ -203,9 +200,10 @@ function setElements(){
                         }
                         else{
                             back= "bush_rose"
+                            /* background-image: url(./img/${back}.png); */
                         }
                         rotate *= 4
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); rotation:${rotate}" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: blue; rotation:${rotate}" class="block"></div>`
                                     break;
                     //trap
                     case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  
@@ -217,7 +215,7 @@ function setElements(){
                     case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: pink" class="block"></div>`  
                                     break;
                     //lever?
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
@@ -344,7 +342,9 @@ function dead(){
 
     setTimeout(function () {
         player.style.visibility = "visible"
-        loadLevel();
+        SetPlayerPos(data[data.length-1][0],data[data.length-1][1])
+        effect = "normal"
+        noMove = "false"
     }, 1200)
 }
 

@@ -8,7 +8,7 @@ let player
 let keydown
 let posPlayer
 
-function loadLevel(){
+function loadLevelData(){
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -29,14 +29,22 @@ function loadLevel(){
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
 }
 
-function loadHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div></div><p>test</p>`
+function loadLevelHtml(){
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div></div><p>test</p><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="level++; loadLevelHtml()"> <p>next level</p><img src="./img/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/home.png" alt="home"> </div> </div> </div> </div>`
 
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes();
     var date = today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
     
     document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>`
+
+    loadLevelData();
+    setElements();
+    player = document.getElementById('player')
+}
+
+function loadMenuHtml(){
+    document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move arround. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
 }
 
 function movePlayer(){
@@ -174,6 +182,9 @@ function checkPosition(){
             if(effect != "ghost"){
                 dead()
                 }
+            break;
+        case "wn":
+            win()
         default:
             clearInfoPopup()
             break
@@ -241,6 +252,7 @@ function setElements(){
                     //temp wall
                     case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
+                    case ("wn"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: gold" class="block"></div>`
                 }
             }
         }
@@ -374,5 +386,8 @@ function SetPlayerPos(row,column){
     }
 
 function win(){
-
+    document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
+    setTimeout(function(){
+        document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
+    },500)
 }

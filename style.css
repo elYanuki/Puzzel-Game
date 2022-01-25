@@ -17,9 +17,23 @@ body{
 
 h1{
     font-family: beba;
-    font-size: 3rem;
 }
 
+h2{
+    font-family: beba;
+    font-size: 1.6rem;
+}
+
+h3{
+    font-family: beba;
+    font-size: 1.4rem;
+}
+
+p{
+    font-weight:400;
+    font-family: light;
+    font-size: 1.1rem;
+}
 /**********Main Style**********/
 
 .flex{
@@ -91,26 +105,34 @@ h1{
 }
 
 #win-overlay{
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.75);
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
+    left: 0;
     z-index: 10;
-    /* visibility: hidden; */
+    visibility: hidden;
+    transition: all 2s;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #win-box{
     position: absolute;
     color: white;
-    top: 50%;
-    right: 50%;
-    transform: translateY(-50%) translateX(50%);
+    opacity: 0;
+    transition: all 1s;
+    transform: translateY(-2rem);
+    cursor: pointer;
 }
 
 #win-box p{
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin: 0;
+    margin-right: 0.5rem;
+    font-size: 1.65rem;
     text-shadow: 0 0 1.5rem black;
 }
 
@@ -132,14 +154,16 @@ h1{
     flex-direction: column;
 }
 
-#win-box div div p{
-    margin: 0;
-    margin-right: 0.5rem;
-}
-
 #win-box div div{
     display: flex;
     flex-direction: row;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+
+#win-box div div:hover{
+    transform: translateY(-0.2rem) scale(1.07);
+    color: var(--maincolor);
 }
 /*---------main menu layout---------*/
 
@@ -201,15 +225,6 @@ h1{
     margin-bottom: 1rem;
     padding: 1rem;
     box-sizing: border-box;
-}
-
-#main-info h1{
-    font-family: beba;
-}
-
-#main-info h2{
-    font-family: beba;
-    font-size: 1.4rem;
 }
 
 #menu-flex{
@@ -354,6 +369,10 @@ h1{
     src: url(./imports/BebasNeue-Regular.ttf);
 }
     
+@font-face {
+    font-family: light;
+    src: url(./imports/OpenSans-VariableFont_wdth\,wght.ttf);
+}
 /**********Keyframes**********/
 
 @keyframes popup-move {
@@ -425,5 +444,5 @@ h1{
 /**********Variables**********/
 :root {
     --tempwall-movement: 0.1rem;
-    --maincolor: red
+    --maincolor:gray
 }

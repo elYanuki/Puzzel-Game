@@ -6,7 +6,8 @@ function loadHandy(posPlayer){
     document.getElementById("handy").style.backgroundColor = "darkblue"
     document.getElementById("handy").innerHTML = "<h2>Press W A S D to move</h2>"
 
-    if(posPlayer.substr(3, 2) == "sn"){
+    console.log(posPlayer.substr(3,2))
+    if(posPlayer.substr(3,2) == "sn"){
         loadSnake();
     }
 }

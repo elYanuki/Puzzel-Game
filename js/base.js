@@ -22,7 +22,7 @@ function loadLevel(){
     document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
     position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
 
-    let gridItems = ""
+    let gridItems = "1fr"
     for (let i = 0; i < data.length-2; i++) { //lässt breite des array die breite des grid bestimmen
         gridItems += " 1fr"
     }
@@ -30,7 +30,7 @@ function loadLevel(){
 }
 
 function loadHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div>`
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div></div><p>test</p>`
 
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes();
@@ -40,52 +40,69 @@ function loadHtml(){
 }
 
 function movePlayer(){
-    /* checkPosition(); */
-    let move = false;
-    let pos0 = position[0]
-    let pos1 = position[1]
-    let playerSprite = document.getElementById("player-sprite")
-
-    switch (keydown){
-        case 0: //up w
-            move = checkMove(Math.max(--pos0, 1), pos1);
-            if(move == true){
-                position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
-                /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
-            }   
-            break
-        case 1: //down s
-            move = checkMove(++pos0, pos1);
-            if(move == true){
-                position[0] = Math.min(++position[0], data[1].length)
-            }
-            break
-        case 2: //left a
-            move = checkMove(pos0, --pos1)
-            if(move == true){
-                position[1] = Math.max(--position[1], 1)
-            }          
-            break
-        case 3: //right d 
-            move = checkMove(pos0, ++pos1)
-            if(move == true){
-                position[1] = Math.min(++position[1], data[1].length)
-            }   
-            break
-    }
-    setTimeout(function () {
-    player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-    }, 5);
-
-    /* setTimeout(function () {
-        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-        playerSprite.style = "transition: none;transform: translateY(0rem);"
-    }, 500) */
+    if(effect == "handy"){
+        switch (keydown){
+            case 0: //up w
+                direction("w");
+                break
+            case 1: //down s
+                direction("s")
+                break
+            case 2: //left a
+                direction("a")
+                break
+            case 3: //right d 
+                direction("d")
+                break
+        }
+    } else{
+        console.log("movepl");
+        let move = false;
+        let pos0 = position[0]
+        let pos1 = position[1]
+        let playerSprite = document.getElementById("player-sprite")
     
-    /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
-
-    checkPosition();
-    /* setTimeout(movePlayer, 50); // async recursion */
+        switch (keydown){
+            case 0: //up w
+                move = checkMove(Math.max(--pos0, 1), pos1);
+                if(move == true){
+                    position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
+                    /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
+                }   
+                break
+            case 1: //down s
+                move = checkMove(++pos0, pos1);
+                if(move == true){
+                    position[0] = Math.min(++position[0], data[1].length)
+                }
+                break
+            case 2: //left a
+                move = checkMove(pos0, --pos1)
+                if(move == true){
+                    position[1] = Math.max(--position[1], 1)
+                }          
+                break
+            case 3: //right d 
+                move = checkMove(pos0, ++pos1)
+                if(move == true){
+                    position[1] = Math.min(++position[1], data[1].length)
+                }   
+                break
+        }
+        setTimeout(function () {
+        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+        }, 5);
+    
+        /* setTimeout(function () {
+            player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+            playerSprite.style = "transition: none;transform: translateY(0rem);"
+        }, 500) */
+        
+        /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
+    
+        checkPosition();
+        /* setTimeout(movePlayer, 50); // async recursion */
+    }
 }
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
@@ -133,22 +150,21 @@ function checkMove(nextY, nextX){
 }
 
 //schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
+let active = false;
 function checkPosition(){
-    posPlayer = data[position[0]-1][position[1]-1].substr(0, 2)
-
-    switch(posPlayer){
+    posPlayer = data[position[0]-1][position[1]-1];
+    switch(posPlayer.substr(0,2)){
         case "lo": 
-            createInfoPopup(position[0], position[1],)
             if (eDown == true) {
+                effect = "handy";
                 clearInfoPopup();
                 loadHandy(posPlayer);
+                active = true;
+            } else if(active == false){
+                createInfoPopup(position[0], position[1],)
             }
             return true;
-            break;
         case "tw":
-            if(data[position[0]-1][position[1]-1].substr(5,2) == "kill"){
-                dead()
-            }
             tempwall()
             break;
         case "gh":
@@ -217,13 +233,13 @@ function setElements(){
                     case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png)" class="block ghost"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: pink" class="block"></div>`  
                                     break;
                     //lever?
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
-                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: rgb(196, 166, 0);" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
                 }
             }
@@ -344,7 +360,9 @@ function dead(){
 
     setTimeout(function () {
         player.style.visibility = "visible"
-        loadLevel();
+        SetPlayerPos(data[data.length-1][0],data[data.length-1][1])
+        effect = "normal"
+        noMove = "false"
     }, 1200)
 }
 
@@ -354,3 +372,7 @@ function SetPlayerPos(row,column){
     
     player.style = `grid-area: ${row} / ${column} / auto / auto;`
     }
+
+function win(){
+
+}

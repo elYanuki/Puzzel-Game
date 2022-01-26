@@ -73,7 +73,7 @@ p{
 }
 #date{
     color: white;
-    padding-top: 5vw;
+    padding-top: 10vh;
     padding-bottom:  1vh;
     font-size: 3rem;
     text-shadow: 2vw black;
@@ -89,9 +89,9 @@ p{
 #unlock{
     border-bottom: white 5px solid;
     border-radius: 1vh;
-    margin-top: 32vw;
-    margin-left: 6.5vw;
-    margin-right: 6.5vw;
+    margin-top: 65vh;
+    margin-left: 14vh;
+    margin-right: 14vh;
     opacity: 1;
     transition: 0.3s all ease-in;
 }

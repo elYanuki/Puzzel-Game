@@ -5,6 +5,7 @@ let eDown = false
 let noMove = false
 let level
 let player
+let playerSprite
 let keydown
 let posPlayer
 
@@ -42,6 +43,7 @@ function loadLevelHtml(){
     loadLevelData();
     setElements();
     player = document.getElementById('player')
+    playerSprite = document.getElementById('player-sprite')
     //leischi hat nen kleinen meischi
 }
 
@@ -66,7 +68,6 @@ function movePlayer(){
                 break
         }
     } else{
-        console.log("movepl");
         let move = false;
         let pos0 = position[0]
         let pos1 = position[1]
@@ -191,7 +192,6 @@ function checkPosition(){
             clearInfoPopup()
             break
     }
-    console.log(data[position[0]-1][position[1]-1])
     //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
@@ -234,7 +234,7 @@ function setElements(){
                             back= "bush_v2_berry"
                             }
                         }
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); transform: rotate(${rotateRNG}deg);" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall-0.png); transform: rotate(${0}deg);" class="block"></div>`
                                     break;
                     //trap
                     case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
@@ -300,7 +300,6 @@ function countdown(duration, name){
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
     if (data) {
-        console.log(event.keyCode);
         switch (event.keyCode) {
             case 87:
             case 38:
@@ -418,10 +417,7 @@ function Datum(temp){
 function loadTime(){
     //Zeit und Datum für Handy
     let datum = Datum("datum")
-    console.log(datum);
     let zeit = Datum("zeit")
-    console.log(zeit)
-    console.log("LoadTime")
 
     document.getElementById("handy").innerHTML += `<h1 id="date">${zeit}</h1><h2 id="date2">${datum}</h2>`
     document.getElementById("handy").innerHTML += `<div id="unlock"></div>`

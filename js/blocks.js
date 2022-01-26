@@ -1,6 +1,5 @@
 function trap(){
     dead();
-    console.log("You dead");
 }
 
 function portal(nextY, nextX){
@@ -40,7 +39,6 @@ function tempwall(){
         if(data[position[0]-1][position[1]-1].substr(0, 2) == "tw"){
             dead();
         }
-        console.log(data[position[0]-1][position[1]-1]);
     },tempwallLivetime+500) //+animation time
 
     setTimeout(function(){

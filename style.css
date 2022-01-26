@@ -290,7 +290,7 @@ p{
     padding: 0.3rem;
     box-sizing: border-box;
     height: 3rem;
-    background-color: rgba(66, 61, 61, 0.6);
+    background-color: rgba(49, 46, 46, 0.6);
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -300,7 +300,7 @@ p{
 }
 
 #info-arrow{
-    background-color: rgba(66, 61, 61, 0.6);
+    background-color: rgba(49, 46, 46, 0.6);
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -330,6 +330,7 @@ p{
     opacity: 0;
     transition: all 0.2s;
     color: rgb(202, 202, 202);
+    font-size: 1rem ;
 }
 
 #ghost{

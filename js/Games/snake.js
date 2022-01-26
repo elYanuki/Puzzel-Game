@@ -23,7 +23,7 @@ function loadSnake(){
         styleS += "display: grid;"
         document.getElementById("handy").style += styleS;
 
-        setObjects(10, 10);
+        setObjects(0, 0);
 
        // setInterval(moveSnake, 1000);
 }
@@ -76,8 +76,8 @@ function setObjects(x, y){
     for(let i = 0; i < snakeMatrix.length; i++){
         for(let j = 0; j < snakeMatrix[0].length; j++){
                 switch(snakeMatrix[i][j]){
-                    case("sn"): document.getElementById("handy").innerHTML += `<div style="grid-area: ${i} / ${j} / auto / auto; background-color: rgb(0, 255, 0);" class="fields"></div>`
-                                snakePos = [i, j];
+                    case("sn"): document.getElementById("handy").innerHTML += `<div style="grid-area: ${x} / ${y} / auto / auto; background-color: rgb(0, 255, 0);" class="fields"></div>`
+                                snakePos = [x, y];
                                 console.log(snakePos)
                                 break;
                     case("ap"): document.getElementById("handy").innerHTML += `<div style="grid-area: ${i} / ${j} / auto / auto; background-color: rgb(255, 0, 0);" class="fields"></div>`

@@ -28,13 +28,11 @@ function loadLevelData(){
         gridItems += " 1fr"
     }
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
-    
-    loadTime();
-    setInterval(loadTime, 1000);
+
 }
 
 function loadLevelHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div></div><p>test</p><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="level++; loadLevelHtml()"> <p>next level</p><img src="./img/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/home.png" alt="home"> </div> </div> </div> </div>`
+    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"></div><div id="settings"></div></div><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="level++; loadLevelHtml()"> <p>next level</p><img src="./img/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/home.png" alt="home"> </div> </div> </div> </div>`
     document.getElementById("handy").innerHTML += `<h1 id="date"></h1><h2 id="date2"></h2>`
     document.getElementById("handy").innerHTML += `<div id="unlock"></div>`
 
@@ -42,7 +40,11 @@ function loadLevelHtml(){
     setElements();
     player = document.getElementById('player')
     playerSprite = document.getElementById('player-sprite')
-    //leischi hat nen kleinen meischi
+
+    loadTime();
+    
+    setInterval(loadTime, 1000);
+    
 }
 
 function loadMenuHtml(){
@@ -165,10 +167,10 @@ function checkPosition(){
     switch(posPlayer.substr(0,2)){
         case "lo": 
             if (eDown == true) {
+                active = true;
                 effect = "handy";
                 clearInfoPopup();
                 handyUnlock();
-                active = true;
             } else if(active == false){
                 createInfoPopup(position[0], position[1],)
             }
@@ -420,12 +422,14 @@ function Datum(temp){
 }
 
 function loadTime(){
+    if(effect != "handy"){
     //Zeit und Datum für Handy
     let datum = Datum("datum")
     let zeit = Datum("zeit")
 
     document.getElementById("date").innerHTML = zeit
     document.getElementById("date2").innerHTML = datum
+}
 }
 
 function handyUnlock(){

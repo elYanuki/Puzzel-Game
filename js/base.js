@@ -27,16 +27,17 @@ function loadLevelData(){
         gridItems += " 1fr"
     }
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
+    loadTime();
 }
 
 function loadLevelHtml(){
     document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"><div id="game"></div></div><div id="settings"></div></div><p>test</p><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="level++; loadLevelHtml()"> <p>next level</p><img src="./img/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/home.png" alt="home"> </div> </div> </div> </div>`
 
-    var today = new Date();
+    /* var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes();
     var date = today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
     
-    document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>`
+    document.getElementById("handy").innerHTML = `<h1 id="date">${time}</h1><h2 id="date2">${date}</h2>` */
 
     loadLevelData();
     setElements();
@@ -167,7 +168,7 @@ function checkPosition(){
             if (eDown == true) {
                 effect = "handy";
                 clearInfoPopup();
-                loadHandy(posPlayer);
+                handyUnlock();
                 active = true;
             } else if(active == false){
                 createInfoPopup(position[0], position[1],)
@@ -391,4 +392,47 @@ function win(){
     setTimeout(function(){
         document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
     },500)
+}
+function Datum(temp){
+    var today = new Date();
+
+    if(temp == "datum"){
+        var month = today.getMonth();
+        var day = today.getDate();
+        var tag = today.getDay();
+
+        let monat = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        let tage = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        
+        var datum = `${tage[tag-1]}, ${monat[month]} ${day}`
+        return datum;
+    }
+    if(temp == "zeit"){
+        var hour = today.getHours();
+        var minutes = today.getMinutes();
+        zeit = `${hour}:${minutes}`
+        return zeit;
+    }
+}
+
+function loadTime(){
+    //Zeit und Datum für Handy
+    let datum = Datum("datum")
+    console.log(datum);
+    let zeit = Datum("zeit")
+    console.log(zeit)
+    console.log("LoadTime")
+
+    document.getElementById("handy").innerHTML += `<h1 id="date">${zeit}</h1><h2 id="date2">${datum}</h2>`
+    document.getElementById("handy").innerHTML += `<div id="unlock"></div>`
+}
+
+function handyUnlock(){
+    document.getElementById("unlock").style = "margin-top: 28vw; opacity: 0;"
+    document.getElementById("date").style = "padding-top: 2vw; opacity: 0;"
+    document.getElementById("date2").style = "opacity: 0;"
+
+    setTimeout(function() {
+        loadHandy(posPlayer);
+      }, 400);    
 }

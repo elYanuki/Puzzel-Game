@@ -53,8 +53,8 @@ p{
     margin: 5vh 0.5vh 5vh 5vh;
     align-items: center;
     justify-items: center;
-    background-image: url(./img/ground.png);
-    background-size: 20%;
+    background-image: url(./img/ground1.png);
+    background-size: 100%;
     border: 0.1rem solid rgb(156, 156, 156);
 }
 
@@ -62,7 +62,6 @@ p{
     grid-auto-columns: 2.25vh;
     grid-auto-rows: 2.25vh;
     text-align: center;
-
     background-image: url(./img/handy.png);
     border: rgb(195, 195, 195) 2px solid;
     border-radius: 0 1vw 1vw 0;

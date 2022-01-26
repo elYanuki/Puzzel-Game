@@ -41,6 +41,7 @@ function loadLevelHtml(){
     loadLevelData();
     setElements();
     player = document.getElementById('player')
+    //leischi hat nen kleinen meischi
 }
 
 function loadMenuHtml(){

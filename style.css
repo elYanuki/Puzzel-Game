@@ -59,19 +59,42 @@ p{
 }
 
 #handy{
-    display: grid;
+    grid-auto-columns: 2.25vh;
+    grid-auto-rows: 2.25vh;
+    text-align: center;
 
-    background-image: url(./img/background.png);
+    background-image: url(./img/handy.png);
     border: rgb(195, 195, 195) 2px solid;
+    border-radius: 0 1vw 1vw 0;
     width: 45vh;
     height: 90vh;
     margin: 5vh 5vh 5vh 0vh;
-    justify-content: center;
-    transition: all 0.5s ease-in;
+    opacity: 1;
+    transition: 0.4 all ease-in;
 }
-#handy h1, #handy h2{
-    color: rgb(195, 195, 195);
-    padding: 0.5vh;
+#date{
+    color: white;
+    padding-top: 5vw;
+    padding-bottom:  1vh;
+    font-size: 3rem;
+    text-shadow: 2vw black;
+}
+#date2{
+    color: white;
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 2px 2px black;
+}
+#date, #date2{
+    transition: 0.3s all ease-in;
+}
+#unlock{
+    border-bottom: white 5px solid;
+    border-radius: 1vh;
+    margin-top: 32vw;
+    margin-left: 6.5vw;
+    margin-right: 6.5vw;
+    opacity: 1;
+    transition: 0.3s all ease-in;
 }
 #settings{
     border: rgb(195, 195, 195) 2px solid;

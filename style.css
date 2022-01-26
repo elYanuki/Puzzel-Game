@@ -15,6 +15,25 @@ body{
     overflow: hidden;
 }
 
+h1{
+    font-family: beba;
+}
+
+h2{
+    font-family: beba;
+    font-size: 1.6rem;
+}
+
+h3{
+    font-family: beba;
+    font-size: 1.4rem;
+}
+
+p{
+    font-weight:400;
+    font-family: light;
+    font-size: 1.1rem;
+}
 /**********Main Style**********/
 
 .flex{
@@ -104,10 +123,71 @@ body{
     color: white;
     width: 100%;
     text-align: center;
-    position: absolute;
+    position: relative;
     font-size: 0.9rem;
 }
 
+#win-overlay{
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    visibility: hidden;
+    transition: all 2s;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#win-box{
+    position: absolute;
+    color: white;
+    opacity: 0;
+    transition: all 1s;
+    transform: translateY(-2rem);
+    cursor: pointer;
+}
+
+#win-box p{
+    margin: 0;
+    margin-right: 0.5rem;
+    font-size: 1.65rem;
+    text-shadow: 0 0 1.5rem black;
+}
+
+#win-box h1{
+    font-size: 3rem;
+    text-align: center;
+    text-shadow: 0 0 1.5rem black;
+}
+
+#win-box img{
+    height: 1.5rem;
+    width: auto;
+}
+
+#win-box div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#win-box div div{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+
+#win-box div div:hover{
+    transform: translateY(-0.2rem) scale(1.07);
+    color: var(--maincolor);
+}
 /*---------main menu layout---------*/
 
 #level-selector{
@@ -146,7 +226,7 @@ body{
     z-index: 2;
     font-family: beba;
     font-size: 2.5rem;
-    text-shadow: 0 0 1.5qrem black;
+    text-shadow: 0 0 1.5rem black;
     transition: all 0.4s;
 }
 
@@ -168,15 +248,6 @@ body{
     margin-bottom: 1rem;
     padding: 1rem;
     box-sizing: border-box;
-}
-
-#main-info h1{
-    font-family: beba;
-}
-
-#main-info h2{
-    font-family: beba;
-    font-size: 1.4rem;
 }
 
 #menu-flex{
@@ -266,6 +337,17 @@ body{
     transition: all 0.5s;
 }
 
+.ghost{
+    background-size: 60% !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation-name: ghost-idel;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-timing-function:linear;
+}
+
 /*---------blocks---------*/
 
 .block{
@@ -273,7 +355,9 @@ body{
     height: 100%;
     user-select: none;
     transition: all 500ms;
-    background-size: cover;
+    background-size: 100%;
+    overflow:visible;
+    /* box-shadow: 0 0 0.4rem black; */
 }
 
 .softwall{
@@ -315,6 +399,10 @@ body{
     src: url(./imports/BebasNeue-Regular.ttf);
 }
     
+@font-face {
+    font-family: light;
+    src: url(./imports/OpenSans-VariableFont_wdth\,wght.ttf);
+}
 /**********Keyframes**********/
 
 @keyframes popup-move {
@@ -381,10 +469,28 @@ body{
         margin-left: 0;
     }
 }
+
+    @keyframes ghost-idel {
+        0%{
+            transform: rotate(-5deg) translateY(0rem);
+        }
+        25%{
+            transform: rotate(5deg) translateY(-0.25rem);
+        }
+        50%{
+            transform: rotate(-5deg) translateY(-0.5rem);
+        }
+        75%{
+            transform: rotate(5deg) translateY(-0.25rem);
+        }
+        100%{
+            transform: rotate(-5deg) translateY(0rem);
+        }
+    }
 /**********Responsive**********/
 
 /**********Variables**********/
 :root {
     --tempwall-movement: 0.1rem;
-    --maincolor: red
+    --maincolor:gray
 }

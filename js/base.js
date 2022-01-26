@@ -8,7 +8,7 @@ let player
 let keydown
 let posPlayer
 
-function loadLevel(){
+function loadLevelData(){
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -22,7 +22,7 @@ function loadLevel(){
     document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
     position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
 
-    let gridItems = ""
+    let gridItems = "1fr"
     for (let i = 0; i < data.length-2; i++) { //lässt breite des array die breite des grid bestimmen
         gridItems += " 1fr"
     }
@@ -161,9 +161,6 @@ function checkPosition(){
             }
             return true;
         case "tw":
-            if(data[position[0]-1][position[1]-1].substr(5,2) == "kill"){
-                dead()
-            }
             tempwall()
             break;
         case "gh":
@@ -173,6 +170,9 @@ function checkPosition(){
             if(effect != "ghost"){
                 dead()
                 }
+            break;
+        case "wn":
+            win()
         default:
             clearInfoPopup()
             break
@@ -183,6 +183,7 @@ function checkPosition(){
 
 //Platziert alle Gegenstände auf dem Spiel
 function setElements(){
+    let last = false
     for(let i = 0; i < data.length; i++){
         for(let j = 0; j < data[0].length; j++){
             if(data[i][j]){
@@ -190,21 +191,39 @@ function setElements(){
                 let rotateRNG = Math.random()
                 let sub = data[i][j].substr(0,2)
                 let back
-                let rotate
+                if(rotateRNG <0.25){
+                    rotateRNG = 90
+                }
+                else if(rotateRNG <0.50){
+                    rotateRNG = 180
+                }
+                else if(rotateRNG <0.75){
+                    rotateRNG = 270
+                }
+                else{
+                    rotateRNG = 0
+                }
+
                 switch(sub){
                     //wall
                     case ("wa"): 
                         if(chooseRNG<0.5){
-                            back = "bush"
+                            back = "bush_v2"
                         }
                         else{
-                            back= "bush_rose"
+                            if(last == true){
+                                back = "bush_v2"
+                                last = false
+                            }
+                            else{
+                            last = true
+                            back= "bush_v2_berry"
+                            }
                         }
-                        rotate *= 4
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); rotation:${rotate}" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/${back}.png); transform: rotate(${rotateRNG}deg);" class="block"></div>`
                                     break;
                     //trap
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28);" class="block"></div>`  
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
                                     break;
                     //portal
                     case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
@@ -213,14 +232,15 @@ function setElements(){
                     case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
                                     break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(255, 255, 255);" class="block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*3}s" class="ghost block"></div>`  
                                     break;
                     //lever?
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
-                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: rgb(196, 166, 0);" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
+                    case ("wn"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: gold" class="block"></div>`
                 }
             }
         }
@@ -340,7 +360,9 @@ function dead(){
 
     setTimeout(function () {
         player.style.visibility = "visible"
-        loadLevel();
+        SetPlayerPos(data[data.length-1][0],data[data.length-1][1])
+        effect = "normal"
+        noMove = "false"
     }, 1200)
 }
 
@@ -349,49 +371,11 @@ function SetPlayerPos(row,column){
     position[1] = column
     
     player.style = `grid-area: ${row} / ${column} / auto / auto;`
-}
-
-function Datum(temp){
-    var today = new Date();
-
-    if(temp == "datum"){
-        var month = today.getMonth();
-        var day = today.getDate();
-        var tag = today.getDay();
-
-        let monat = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        let tage = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        
-        var datum = `${tage[tag-1]}, ${monat[month]} ${day}`
-        return datum;
     }
-    if(temp == "zeit"){
-        var hour = today.getHours();
-        var minutes = today.getMinutes();
-        zeit = `${hour}:${minutes}`
-        return zeit;
-    }
+
+function win(){
+    document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
+    setTimeout(function(){
+        document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
+    },500)
 }
-
-function loadTime(){
-    //Zeit und Datum für Handy
-    let datum = Datum("datum")
-    console.log(datum);
-    let zeit = Datum("zeit")
-    console.log(zeit)
-    console.log("LoadTime")
-
-    document.getElementById("handy").innerHTML += `<h1 id="date">${zeit}</h1><h2 id="date2">${datum}</h2>`
-    document.getElementById("handy").innerHTML += `<div id="unlock"></div>`
-}
-
-function handyUnlock(){
-    document.getElementById("unlock").style = "margin-top: 28vw; opacity: 0;"
-    document.getElementById("date").style = "padding-top: 2vw; opacity: 0;"
-    document.getElementById("date2").style = "opacity: 0;"
-
-    setTimeout(function() {
-        loadHandy(posPlayer);
-      }, 400);    
-}
-

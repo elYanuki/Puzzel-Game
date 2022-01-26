@@ -5,14 +5,19 @@ function trap(){
 function portal(nextY, nextX){
     noMove = true
     setTimeout(function () {
-        playerSprite.style.width = "90%"
-        playerSprite.style.height = " 90%"
+        playerSprite.style.width = "120%"
+        playerSprite.style.height = " 120%"
     }, 10)
     
     setTimeout(function () {
         playerSprite.style.width = "0%"
         playerSprite.style.height = " 0%"
     }, 200)
+
+    setTimeout(function () {
+        playerSprite.style.width = "100%"
+        playerSprite.style.height = " 100%"
+    }, 320)
 
     setTimeout(function () {
     position[0] = parseInt(data[nextY-1][nextX-1].substr(3,2))

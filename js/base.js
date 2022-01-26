@@ -10,6 +10,7 @@ let keydown
 let posPlayer
 
 function loadLevelData(){
+    ifhome = false;
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -48,6 +49,7 @@ function loadLevelHtml(){
 }
 
 function loadMenuHtml(){
+    ifhome = true
     document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move arround. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
 }
 
@@ -191,6 +193,10 @@ function checkPosition(){
             clearInfoPopup()
             break
     }
+
+    if(position[0] == data[data.length-1][2] && position[1] == data[data.length-1][3]){
+        win()
+    }
     //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
@@ -246,7 +252,7 @@ function setElements(){
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
                         break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*3}s" class="ghost block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
                                     break;
                     //lever?
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
@@ -254,11 +260,11 @@ function setElements(){
                     //temp wall
                     case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
-                    case ("wn"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: gold" class="block"></div>`
                 }
             }
         }
     }
+    document.getElementById("board").innerHTML += `<div style="grid-area: ${data[data.length-1][2]} / ${data[data.length-1][3]} / auto / auto; background-color: gold" class="block"></div>`
     movePlayer()
 }
 
@@ -387,10 +393,12 @@ function SetPlayerPos(row,column){
     }
 
 function win(){
+    if(ifhome == false){
     document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
     setTimeout(function(){
         document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
     },500)
+}
 }
 
 function Datum(temp){
@@ -422,7 +430,7 @@ function Datum(temp){
 }
 
 function loadTime(){
-    if(effect != "handy"){
+    if(effect != "handy" && ifhome == false){
     //Zeit und Datum für Handy
     let datum = Datum("datum")
     let zeit = Datum("zeit")

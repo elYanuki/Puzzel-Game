@@ -500,6 +500,6 @@ p{
 
 /**********Variables**********/
 :root {
-    --tempwall-movement: 0.1rem;
+    --tempwall-movement: 0.2rem;
     --maincolor:gray
 }

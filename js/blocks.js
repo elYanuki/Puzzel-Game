@@ -5,13 +5,13 @@ function trap(){
 function portal(nextY, nextX){
     noMove = true
     setTimeout(function () {
-        player.style.width = "90%"
-        player.style.height = " 90%"
+        playerSprite.style.width = "90%"
+        playerSprite.style.height = " 90%"
     }, 10)
     
     setTimeout(function () {
-        player.style.width = "0%"
-        player.style.height = " 0%"
+        playerSprite.style.width = "0%"
+        playerSprite.style.height = " 0%"
     }, 200)
 
     setTimeout(function () {
@@ -64,7 +64,7 @@ function ghostItem(){
 
                 let softwalls = document.getElementsByClassName("softwall")
 
-                player.classList.add("player-ghostmode")
+                playerSprite.classList.add("player-ghostmode")
 
                 for (let i = 0; i < softwalls.length; i++) {
                     softwalls[i].classList.add("softwall-ghostmode")
@@ -75,7 +75,7 @@ function ghostItem(){
                 setTimeout(function () {
                     effect = "normal"
 
-                    player.classList.remove("player-ghostmode")
+                    playerSprite.classList.remove("player-ghostmode")
 
                     for (let i = 0; i < softwalls.length; i++) {
                         softwalls[i].classList.remove("softwall-ghostmode")

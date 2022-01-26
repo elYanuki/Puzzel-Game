@@ -4,8 +4,8 @@ let effect = "normal"
 let eDown = false
 let noMove = false
 let level
-let player
-let playerSprite
+let player //position des player
+let playerSprite //style des player
 let keydown
 let posPlayer
 
@@ -71,7 +71,6 @@ function movePlayer(){
         let move = false;
         let pos0 = position[0]
         let pos1 = position[1]
-        let playerSprite = document.getElementById("player-sprite")
     
         switch (keydown){
             case 0: //up w
@@ -221,20 +220,7 @@ function setElements(){
                 switch(sub){
                     //wall
                     case ("wa"): 
-                        if(chooseRNG<0.5){
-                            back = "bush_v2"
-                        }
-                        else{
-                            if(last == true){
-                                back = "bush_v2"
-                                last = false
-                            }
-                            else{
-                            last = true
-                            back= "bush_v2_berry"
-                            }
-                        }
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall-0.png); transform: rotate(${0}deg);" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall.png); transform: rotate(${0}deg);" class="block"></div>`
                                     break;
                     //trap
                     case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
@@ -243,8 +229,22 @@ function setElements(){
                     case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
                                     break;
                     //softwall
-                    case ("sw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 80, 128);" class="block softwall"></div>`  
-                                    break;
+                    case ("sw"): 
+                        if (chooseRNG < 0.4) {
+                            back = "bush_v2"
+                        }
+                        else {
+                            if (last == true) {
+                                back = "bush_v2"
+                                last = false
+                            }
+                            else {
+                                last = true
+                                back = "bush_v2_berry"
+                            }
+                        }
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
+                        break;
                     //ghost
                     case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*3}s" class="ghost block"></div>`  
                                     break;
@@ -343,7 +343,7 @@ document.addEventListener('keydown', function(event) {
 function dead(){
     effect = "normal"
 
-    player.classList.remove("player-ghostmode")
+    playerSprite.classList.remove("player-ghostmode")
 
     let softwalls = document.getElementsByClassName("softwall")
 
@@ -356,23 +356,23 @@ function dead(){
     noMove = true
 
     setTimeout(function () {
-        player.style.visibility = "hidden"
+        playerSprite.style.visibility = "hidden"
     }, 200)
     setTimeout(function () {
-        player.style.visibility = "visible"
+        playerSprite.style.visibility = "visible"
     }, 400)
     setTimeout(function () {
-        player.style.visibility = "hidden"
+        playerSprite.style.visibility = "hidden"
     }, 600)
     setTimeout(function () {
-        player.style.visibility = "visible"
+        playerSprite.style.visibility = "visible"
     }, 800)
     setTimeout(function () {
-        player.style.visibility = "hidden"
+        playerSprite.style.visibility = "hidden"
     }, 1000)
 
     setTimeout(function () {
-        player.style.visibility = "visible"
+        playerSprite.style.visibility = "visible"
         SetPlayerPos(data[data.length-1][0],data[data.length-1][1])
         effect = "normal"
         noMove = "false"

@@ -290,7 +290,7 @@ p{
 }
 
 .player-ghostmode{
-    background-color: rgba(0, 128, 0, 0.5);
+    opacity: 0.5;
     box-shadow: white 0 0 1rem;
 }
 
@@ -374,7 +374,7 @@ p{
 }
 
 .softwall-ghostmode{
-    background-color: rgba(47, 129, 236, 0.2);
+    opacity: 0.6;
     border: 0.17vw black dashed;
 }
 

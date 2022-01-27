@@ -1,5 +1,19 @@
 function trap(){
     dead();
+
+    setTimeout(function(){
+    for (let i = 0; i < document.getElementsByClassName("trap").length; i++) {
+        document.getElementsByClassName("trap")[i].style.background = "url(./img/trap_out.png)"
+        document.getElementsByClassName("trap")[i].style.backgroundSize = "100%"
+    }
+
+    setTimeout(function(){
+        for (let i = 0; i < document.getElementsByClassName("trap").length; i++) {
+            document.getElementsByClassName("trap")[i].style.background = "url(./img/trap.png)"
+            document.getElementsByClassName("trap")[i].style.backgroundSize = "100%"
+        }
+    },1000)
+},200)
 }
 
 function portal(nextY, nextX){
@@ -121,15 +135,15 @@ function updateObjects(){
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data.length; j++) { //cycled durch jede zelle   
             if(data[i][j] && data[i][j].substr(0,2) == "dr"){ //wenn zelle door ist
-                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "on"){ //wenn lever oder trap an den coordinaten die in der zelle angegeben sind "on" ist
+                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "on"){ //wenn lever oder button an den coordinaten die in der zelle angegeben sind "on" ist
                 document.getElementById(`door-${data[i][j].substr(3,2)}`).style.backgroundColor = "green"
                 document.getElementById(`door-${data[i][j].substr(3,2)}`).style.opacity = "1"
-                data[i][j] = `${data[i][j].substr(0,12)}op`
+                data[i][j] = `${data[i][j].substr(0,14)}op`
                 }
-                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "of"){ //wenn lever oder trap an den coordinaten die in der zelle angegeben sind "on" ist
+                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "of"){ //wenn lever oder button an den coordinaten die in der zelle angegeben sind "of" ist
                     document.getElementById(`door-${data[i][j].substr(3,2)}`).style.backgroundColor = "rgb(100, 100, 60)"
                     document.getElementById(`door-${data[i][j].substr(3,2)}`).style.opacity = "0.5"
-                    data[i][j] = `${data[i][j].substr(0,12)}cl`
+                    data[i][j] = `${data[i][j].substr(0,14)}cl`
                     }
             }
         }

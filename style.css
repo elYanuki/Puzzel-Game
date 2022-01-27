@@ -398,6 +398,21 @@ p{
     justify-self: center;
 }
 
+.trap{
+    background-image: url(./img/trap.png);
+    background-size: 100%;
+    width: 80%;
+    height: 80%;
+}
+
+.portal{
+    animation-name: portal-idel;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+    animation-direction:reverse;
+    animation-timing-function: linear;
+}
+
 /*---------fields---------*/
 
 .fields{
@@ -485,23 +500,45 @@ p{
     }
 }
 
-    @keyframes ghost-idel {
-        0%{
-            transform: rotate(-5deg) translateY(0rem);
-        }
-        25%{
-            transform: rotate(5deg) translateY(-0.25rem);
-        }
-        50%{
-            transform: rotate(-5deg) translateY(-0.5rem);
-        }
-        75%{
-            transform: rotate(5deg) translateY(-0.25rem);
-        }
-        100%{
-            transform: rotate(-5deg) translateY(0rem);
-        }
+@keyframes ghost-idel {
+    0%{
+        transform: rotate(-5deg) translateY(0rem);
     }
+    25%{
+        transform: rotate(5deg) translateY(-0.25rem);
+    }
+    50%{
+        transform: rotate(-5deg) translateY(-0.5rem);
+    }
+    75%{
+        transform: rotate(5deg) translateY(-0.25rem);
+    }
+    100%{
+        transform: rotate(-5deg) translateY(0rem);
+    }
+}
+
+@keyframes portal-idel {
+    0%{
+        opacity: 1;
+        transform: rotate(0deg) scaleX(1);
+    }
+    25%{
+        opacity: 0.9;
+        transform: rotate(90deg);
+    }
+    50%{
+        opacity: 1;
+        transform: scaleX(1.05) rotate(180deg);
+    }
+    75%{
+        opacity: 0.95;
+        transform: scaleX(0.9) rotate(270deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
 /**********Responsive**********/
 
 /**********Variables**********/

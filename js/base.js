@@ -155,10 +155,10 @@ function checkMove(nextY, nextX){
                 return true;
                 break
             case "dr": //door
-                if(data[nextY-1][nextX-1].substr(12,2) == "op"){
+                if(data[nextY-1][nextX-1].substr(14,2) == "op"){
                     return true;
                 }
-                else if(data[nextY-1][nextX-1].substr(12,2) == "cl"){
+                else if(data[nextY-1][nextX-1].substr(14,2) == "cl"){
                     return false;
                 }
                 break
@@ -232,7 +232,7 @@ function setElements(){
                 let rotateRNG = Math.random()
                 let sub = data[i][j].substr(0,2)
                 let back
-                if(rotateRNG <0.25){
+                /* if(rotateRNG <0.25){
                     rotateRNG = 90
                 }
                 else if(rotateRNG <0.50){
@@ -243,7 +243,8 @@ function setElements(){
                 }
                 else{
                     rotateRNG = 0
-                }
+                } */
+                rotateRNG = 0
 
                 switch(sub){
                     //wall
@@ -251,10 +252,10 @@ function setElements(){
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall.png); transform: rotate(${0}deg);" class="block"></div>`
                                     break;
                     //trap
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block trap"></div>`  
                                     break;
                     //portal
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/portal.png);" class="block portal"></div>`  
                                     break;
                     //softwall
                     case ("sw"): 
@@ -288,7 +289,14 @@ function setElements(){
                     document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
                     case ("dr"): 
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 100, 60); display:grid" class="block door" id="door-${data[i][j].substr(3,2)}"></div>`
+                    let rotate
+                    if(data[i][j].substr(12,1) == "y"){
+                        rotate = "90deg"
+                    }
+                    else{
+                        rotate = "0deg"
+                    }
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/door.png); display:grid; transform: rotate(${rotate})" class="block door" id="door-${data[i][j].substr(3,2)}"></div>`
                                     break;
                 }
             }

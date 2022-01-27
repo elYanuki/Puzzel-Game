@@ -39,6 +39,7 @@ function loadLevelHtml(){
 
     loadLevelData();
     setElements();
+    updateObjects()
     player = document.getElementById('player')
     playerSprite = document.getElementById('player-sprite')
 
@@ -70,6 +71,7 @@ function movePlayer(){
                 break
         }
     } else{
+        if(noMove != true){
         let move = false;
         let pos0 = position[0]
         let pos1 = position[1]
@@ -116,6 +118,7 @@ function movePlayer(){
         /* setTimeout(movePlayer, 50); // async recursion */
     }
 }
+}
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
@@ -148,8 +151,16 @@ function checkMove(nextY, nextX){
                     return false;
                 }
                 break
-            case "tw": //idk
+            case "tw": //temporary wall
                 return true;
+                break
+            case "dr": //door
+                if(data[nextY-1][nextX-1].substr(12,2) == "op"){
+                    return true;
+                }
+                else if(data[nextY-1][nextX-1].substr(12,2) == "cl"){
+                    return false;
+                }
                 break
             default: //feld ist ghost etc.
                 return true;
@@ -177,7 +188,12 @@ function checkPosition(){
             }
             return true;
         case "tw":
+            if (posPlayer.substr(6,4)!='kill'){
             tempwall()
+            }
+            if(posPlayer.substr(6,4)=='kill'){
+                dead()
+            }
             break;
         case "gh":
             ghostItem()
@@ -189,6 +205,12 @@ function checkPosition(){
             break;
         case "wn":
             win()
+            break
+        case "lv":
+            lever()
+            break
+        case "dr":
+            break
         default:
             clearInfoPopup()
             break
@@ -254,11 +276,19 @@ function setElements(){
                     //ghost
                     case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
                                     break;
-                    //lever?
+                    //lever
+                    case ("lv"): 
+                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color:rgb(50,80,100);" class="lever block"></div>`  
+                                    break;
+                    //locked
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
-                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                    case ("tw"): 
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                                    break;
+                    case ("dr"): 
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 100, 60); display:grid" class="block door" id="door-${data[i][j].substr(3,2)}"></div>`
                                     break;
                 }
             }

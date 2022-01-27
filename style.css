@@ -121,7 +121,9 @@ p{
 }
 
 #countdown{
+    margin: 0;
     background-color: blue;
+    top: 0;
     height: 100%;
     width: 0%;
     animation-timing-function: linear;
@@ -131,8 +133,9 @@ p{
     color: white;
     width: 100%;
     text-align: center;
-    position: relative;
+    position: absolute;
     font-size: 0.9rem;
+    top: -10%;
 }
 
 #win-overlay{
@@ -278,6 +281,9 @@ p{
     transition: width 0.2s, height 0.2s, opacity 0.5s;
     user-select: none;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #player-sprite{

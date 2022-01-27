@@ -31,6 +31,8 @@ function portal(nextY, nextX){
 function tempwall(){
     let tempwallLivetime = 1000
     let tempwallDowntime = 1500 //immer nur in 300er schitten ändern wegen animation
+    let myrow = position[0]-1
+    let mycol = position[1]-1
 
     let thisWall = document.getElementById(`tempwall-${data[position[0]-1][position[1]-1].substr(3,2)}`)
     thisWall.style.animationPlayState = "running"
@@ -41,16 +43,18 @@ function tempwall(){
     },tempwallLivetime)
 
     setTimeout(function(){
-        if(data[position[0]-1][position[1]-1].substr(0, 2) == "tw"){
-            dead();
-        }
+        data[myrow][mycol] = `${data[myrow][mycol]}-kill`
+        checkPosition()
     },tempwallLivetime+500) //+animation time
 
     setTimeout(function(){
+        data[myrow][mycol] = data[myrow][mycol].substr(0,5)
         thisWall.style.animationPlayState = "paused"
         thisWall.style.width = "100%"
         thisWall.style.height = "100%"
     },tempwallLivetime+500+tempwallDowntime)
+
+    
 }
 
 function ghostItem(){
@@ -90,6 +94,46 @@ function ghostItem(){
             }
         }
         return effect;
+}
+
+function lever(){
+    let myrow = position[0]-1
+    let mycol = position[1]-1
+
+    createInfoPopup(position[0], position[1], "press E to flip the lever");
+
+    if (eDown == true) {
+        clearInfoPopup() //e sorgt ja für den pickup
+
+            let lever = document.getElementById(`lever-${data[position[0]-1][position[1]-1].substr(3,1)}`)
+
+            if(data[myrow][mycol].substr(6,2) == "on"){
+                data[myrow][mycol] = `${data[myrow][mycol].substr(0,6)}of`
+            }
+            else if(data[myrow][mycol].substr(6,2) == "of"){
+                data[myrow][mycol] = `${data[myrow][mycol].substr(0,6)}on`
+            }
+            updateObjects()
+    }
+}
+
+function updateObjects(){
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data.length; j++) { //cycled durch jede zelle   
+            if(data[i][j] && data[i][j].substr(0,2) == "dr"){ //wenn zelle door ist
+                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "on"){ //wenn lever oder trap an den coordinaten die in der zelle angegeben sind "on" ist
+                document.getElementById(`door-${data[i][j].substr(3,2)}`).style.backgroundColor = "green"
+                document.getElementById(`door-${data[i][j].substr(3,2)}`).style.opacity = "1"
+                data[i][j] = `${data[i][j].substr(0,12)}op`
+                }
+                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "of"){ //wenn lever oder trap an den coordinaten die in der zelle angegeben sind "on" ist
+                    document.getElementById(`door-${data[i][j].substr(3,2)}`).style.backgroundColor = "rgb(100, 100, 60)"
+                    document.getElementById(`door-${data[i][j].substr(3,2)}`).style.opacity = "0.5"
+                    data[i][j] = `${data[i][j].substr(0,12)}cl`
+                    }
+            }
+        }
+    }
 }
 
 function killBlock(block){

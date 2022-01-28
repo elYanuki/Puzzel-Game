@@ -56,15 +56,6 @@ function moveSnake(){
     loadSnake();
 }
 
-function direction (direction){
-    switch(direction){
-        case("w"): movement = "w"; break;
-        case("s"): movement = "s"; break;
-        case("a"): movement = "a"; break;
-        case("d"): movement = "d"; break;
-    }
-}
-
 function setObjects(x, y){
     snakeMatrix[x][y] = "sn"
     //Random Apfel Koordinaten

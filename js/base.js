@@ -10,6 +10,7 @@ let keydown
 let posPlayer
 
 function loadLevelData(){
+    ifhome = false;
     switch (level){
         case 1: data = lvl1();break;
         case 2: data = lvl2();break;
@@ -38,6 +39,7 @@ function loadLevelHtml(){
 
     loadLevelData();
     setElements();
+    updateObjects()
     player = document.getElementById('player')
     playerSprite = document.getElementById('player-sprite')
 
@@ -48,6 +50,7 @@ function loadLevelHtml(){
 }
 
 function loadMenuHtml(){
+    ifhome = true
     document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move arround. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
 }
 
@@ -69,6 +72,7 @@ function movePlayer(){
                 break
         }
     } else{
+        if(noMove != true){
         let move = false;
         let pos0 = position[0]
         let pos1 = position[1]
@@ -115,6 +119,7 @@ function movePlayer(){
         /* setTimeout(movePlayer, 50); // async recursion */
     }
 }
+}
 
 //Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
 function checkMove(nextY, nextX){
@@ -147,8 +152,16 @@ function checkMove(nextY, nextX){
                     return false;
                 }
                 break
-            case "tw": //idk
+            case "tw": //temporary wall
                 return true;
+                break
+            case "dr": //door
+                if(data[nextY-1][nextX-1].substr(14,2) == "op"){
+                    return true;
+                }
+                else if(data[nextY-1][nextX-1].substr(14,2) == "cl"){
+                    return false;
+                }
                 break
             default: //feld ist ghost etc.
                 return true;
@@ -176,7 +189,12 @@ function checkPosition(){
             }
             return true;
         case "tw":
+            if (posPlayer.substr(6,4)!='kill'){
             tempwall()
+            }
+            if(posPlayer.substr(6,4)=='kill'){
+                dead()
+            }
             break;
         case "gh":
             ghostItem()
@@ -188,9 +206,19 @@ function checkPosition(){
             break;
         case "wn":
             win()
+            break
+        case "lv":
+            lever()
+            break
+        case "dr":
+            break
         default:
             clearInfoPopup()
             break
+    }
+
+    if(position[0] == data[data.length-1][2] && position[1] == data[data.length-1][3]){
+        win()
     }
     //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
@@ -205,7 +233,7 @@ function setElements(){
                 let rotateRNG = Math.random()
                 let sub = data[i][j].substr(0,2)
                 let back
-                if(rotateRNG <0.25){
+                /* if(rotateRNG <0.25){
                     rotateRNG = 90
                 }
                 else if(rotateRNG <0.50){
@@ -216,7 +244,8 @@ function setElements(){
                 }
                 else{
                     rotateRNG = 0
-                }
+                } */
+                rotateRNG = 0
 
                 switch(sub){
                     //wall
@@ -224,10 +253,10 @@ function setElements(){
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall.png); transform: rotate(${0}deg);" class="block"></div>`
                                     break;
                     //trap
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/water.png)" class="block"></div>`  
+                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block trap"></div>`  
                                     break;
                     //portal
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(0, 0, 0);" class="block"></div>`  
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/portal.png);" class="block portal"></div>`  
                                     break;
                     //softwall
                     case ("sw"): 
@@ -247,19 +276,34 @@ function setElements(){
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
                         break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*3}s" class="ghost block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
                                     break;
-                    //lever?
+                    //lever
+                    case ("lv"): 
+                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color:rgb(50,80,100);" class="lever block"></div>`  
+                                    break;
+                    //locked
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
-                    case ("tw"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                    case ("tw"): 
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
-                    case ("wn"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: gold" class="block"></div>`
+                    case ("dr"): 
+                    let rotate
+                    if(data[i][j].substr(12,1) == "y"){
+                        rotate = "90deg"
+                    }
+                    else{
+                        rotate = "0deg"
+                    }
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/door.png); display:grid; transform: rotate(${rotate})" class="block door" id="door-${data[i][j].substr(3,2)}"></div>`
+                                    break;
                 }
             }
         }
     }
+    document.getElementById("board").innerHTML += `<div style="grid-area: ${data[data.length-1][2]} / ${data[data.length-1][3]} / auto / auto; background-color: gold" class="block"></div>`
     movePlayer()
 }
 
@@ -388,10 +432,12 @@ function SetPlayerPos(row,column){
     }
 
 function win(){
+    if(ifhome == false){
     document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
     setTimeout(function(){
         document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
     },500)
+}
 }
 
 function Datum(temp){
@@ -423,7 +469,7 @@ function Datum(temp){
 }
 
 function loadTime(){
-    if(effect != "handy"){
+    if(effect != "handy" && ifhome == false){
     //Zeit und Datum für Handy
     let datum = Datum("datum")
     let zeit = Datum("zeit")

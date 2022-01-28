@@ -58,16 +58,17 @@ function movePlayer(){
     if(effect == "handy"){
         switch (keydown){
             case 0: //up w
-                direction("w");
+                moveBlocks("w");
                 break
             case 1: //down s
-                direction("s")
+                
+            moveBlocks("s")
                 break
             case 2: //left a
-                direction("a")
+                moveBlocks("a")
                 break
             case 3: //right d 
-                direction("d")
+                moveBlocks("d")
                 break
         }
     } else{

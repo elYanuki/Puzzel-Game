@@ -137,7 +137,9 @@ function checkMove(nextY, nextX){
                 return true;
                 break
             case "tr": //trap
-                trap();
+                if(trapState==1){
+                    dead();
+                }
                 return true;
                 break
             case "po": //portal
@@ -210,6 +212,11 @@ function checkPosition(){
             lever()
             break
         case "dr":
+            break
+        case "tr":
+            if(trapState==1){
+                dead();
+            }
             break
         default:
             clearInfoPopup()
@@ -289,14 +296,7 @@ function setElements(){
                     document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
                     case ("dr"): 
-                    let rotate
-                    if(data[i][j].substr(12,1) == "y"){
-                        rotate = "90deg"
-                    }
-                    else{
-                        rotate = "0deg"
-                    }
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/door.png); display:grid; transform: rotate(${rotate})" class="block door" id="door-${data[i][j].substr(3,2)}"></div>`
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3,2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
                                     break;
                 }
             }
@@ -343,6 +343,7 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
+    console.log(event);
     if (data) {
         switch (event.keyCode) {
             case 87:
@@ -358,7 +359,7 @@ document.addEventListener('keydown', function(event) {
             case 39:
             case 'D': keydown = 3; movePlayer();break;
             case 69:
-            case 'E': eDown = true; checkPosition(); break
+            case 13: eDown = true; checkPosition(); break
         }
     }
 });
@@ -379,7 +380,7 @@ document.addEventListener('keydown', function(event) {
                 case 39:
                 case 'D': keydown = ""; break;
                 case 69:
-                case 'E': eDown = false; checkPosition(); break
+                case 13: eDown = false; checkPosition(); break
             }
         }
     });

@@ -444,7 +444,17 @@ p{
 }
 
 .sub-door{
-    border: 0.1rem solid black;
+    /* border: 0.1rem solid black; */
+    background-image: url(./img/door_1.png);
+    background-size: cover;
+}
+
+.button{
+    background-color: aqua;
+}
+
+.lever{
+    background-color: lightgreen;
 }
 
 /*---------fields---------*/
@@ -471,7 +481,9 @@ p{
 
 @keyframes popup-move {
     from{
-        margin-bottom: 0;
+        margin-bottom
+        
+        : 0;
     }
 
     to{

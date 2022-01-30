@@ -8,6 +8,7 @@ let player //position des player
 let playerSprite //style des player
 let keydown
 let posPlayer
+let Inventory = []
 
 function loadLevelData(){
     ifhome = false;
@@ -46,12 +47,12 @@ function loadLevelHtml(){
     loadTime();
     
     setInterval(loadTime, 1000);
-    
+    setInterval(trap,3000);
 }
 
 function loadMenuHtml(){
     ifhome = true
-    document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move arround. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
+    document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move around. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
 }
 
 function movePlayer(){
@@ -158,11 +159,16 @@ function checkMove(nextY, nextX){
                 return true;
                 break
             case "dr": //door
-                if(data[nextY-1][nextX-1].substr(14,2) == "op"){
-                    return true;
+                if (data[nextY - 1][nextX - 1].substr(3, 2) == "ky") {
+                    
                 }
-                else if(data[nextY-1][nextX-1].substr(14,2) == "cl"){
-                    return false;
+                else {
+                    if (data[nextY - 1][nextX - 1].substr(12, 2) == "op") {
+                        return true;
+                    }
+                    else if (data[nextY - 1][nextX - 1].substr(12, 2) == "cl") {
+                        return false;
+                    }
                 }
                 break
             default: //feld ist ghost etc.
@@ -212,6 +218,9 @@ function checkPosition(){
         case "lv":
             lever()
             break
+        case "bt":
+            button()
+            break
         case "dr":
             break
         case "tr":
@@ -226,6 +235,10 @@ function checkPosition(){
 
     if(position[0] == data[data.length-1][2] && position[1] == data[data.length-1][3]){
         win()
+    }
+
+    if(posPlayer.substr(0,2) != "bt"){
+        resetButtons()
     }
     //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
@@ -287,14 +300,18 @@ function setElements(){
                                     break;
                     //lever
                     case ("lv"): 
-                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color:rgb(50,80,100);" class="lever block"></div>`  
+                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="lever block"></div>`  
+                                    break;
+                    //lever
+                    case ("bt"): 
+                    document.getElementById("board").innerHTML += `<div id="button-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="button block"></div>`  
                                     break;
                     //locked
                     case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
                                     break;
                     //temp wall
                     case ("tw"): 
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(200, 100, 28); display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: lightgreen; display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
                     case ("dr"): 
                     document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3,2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
@@ -312,7 +329,7 @@ function createInfoPopup(x,y,text) {
         document.getElementById("info-text").innerHTML = text
     }
     else{
-        document.getElementById("info-text").innerHTML = `Press E to pick up the item`
+        document.getElementById("info-text").innerHTML = `Press E or Enter to pick up the item`
     }
     document.getElementById("info-relative").style = `grid-area: ${x} / ${y} / auto / auto;visibility:visible;`
     document.getElementById("info").style.width = "10rem"
@@ -344,7 +361,7 @@ function countdown(duration, name){
 
 //Select Keys for Movement
 document.addEventListener('keydown', function(event) {
-    console.log(event);
+/*     console.log(event); */
     if (data) {
         switch (event.keyCode) {
             case 87:

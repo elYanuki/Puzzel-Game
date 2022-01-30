@@ -1,4 +1,6 @@
 let trapState = 0
+let lastButtonRow
+let lastButtonCol
 
 function trap(){
     if(trapState==0){
@@ -19,8 +21,6 @@ function trap(){
         checkPosition()
     }
 }
-
-setInterval(trap,3000);
 
 function portal(nextY, nextX){
     noMove = true
@@ -120,7 +120,7 @@ function lever(){
     let myrow = position[0]-1
     let mycol = position[1]-1
 
-    createInfoPopup(position[0], position[1], "press E to flip the lever");
+    createInfoPopup(position[0], position[1], "press E or Enter to flip the lever");
 
     if (eDown == true) {
         clearInfoPopup() //e sorgt ja für den pickup
@@ -137,23 +137,49 @@ function lever(){
     }
 }
 
+function button(){
+    let myrow = position[0]-1
+    let mycol = position[1]-1
+
+    let button = document.getElementById(`button-${data[myrow][mycol].substr(3,1)}`)
+
+    data[myrow][mycol] = `${data[myrow][mycol].substr(0,6)}of`
+    lastButtonRow = myrow
+    lastButtonCol = mycol
+    updateObjects()
+}
+
+function resetButtons(){1
+    if(lastButtonCol){
+        data[lastButtonRow][lastButtonCol] = `${data[lastButtonRow][lastButtonCol].substr(0,6)}on`
+        updateObjects()
+    }
+}
+
 function updateObjects(){
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data.length; j++) { //cycled durch jede zelle   
-            if(data[i][j] && data[i][j].substr(0,2) == "dr"){ //wenn zelle door ist
-                let door = document.getElementById(`door-${data[i][j].substr(3,2)}`)
-                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "on"){ //wenn lever oder button an den coordinaten die in der zelle angegeben sind "on" ist
-                    for (let i = 0; i < 4; i++) {
-                        door.childNodes[i].style = `width: 100%;height:100%`
+            if(data[i][j]){
+                if (data[i][j].substr(0, 2) == "dr") {//wenn zelle door ist && kein key gesteurtes lock
+                    let door = document.getElementById(`door-${data[i][j].substr(3, 2)}`)
+                    if (data[i][j].substr(2, 2) == "ky") {
+                        
                     }
-                    data[i][j] = `${data[i][j].substr(0,14)}cl`
+                    else {
+                        if (data[parseInt(data[i][j].substr(6, 2)) - 1][parseInt(data[i][j].substr(9, 2)) - 1].substr(6, 2) == "on") { //wenn lever oder button an den coordinaten die in der zelle angegeben sind "on" ist
+                            for (let i = 0; i < 4; i++) {
+                                door.childNodes[i].style = `width: 100%;height:100%`
+                            }
+                            data[i][j] = `${data[i][j].substr(0, 12)}cl`
+                        }
+                        if (data[parseInt(data[i][j].substr(6, 2)) - 1][parseInt(data[i][j].substr(9, 2)) - 1].substr(6, 2) == "of") { //wenn lever oder button an den coordinaten die in der zelle angegeben sind "of" ist 
+                            for (let i = 0; i < 4; i++) {
+                                door.childNodes[i].style = `width: 30%;height:30%;background-color:green;`
+                            }
+                            data[i][j] = `${data[i][j].substr(0, 12)}op`
+                        }
+                    }
                 }
-                if(data[parseInt(data[i][j].substr(6,2))-1] [parseInt(data[i][j].substr(9,2))-1].substr(6,2) == "of"){ //wenn lever oder button an den coordinaten die in der zelle angegeben sind "of" ist 
-                    for (let i = 0; i < 4; i++) {
-                        door.childNodes[i].style = `width: 30%;height:30%;background-color:green;`
-                    }
-                    data[i][j] = `${data[i][j].substr(0,14)}op`
-                    }
             }
         }
     }

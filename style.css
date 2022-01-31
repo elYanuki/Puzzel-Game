@@ -422,6 +422,9 @@ p{
     align-items: center;
     justify-items: center;
 }
+.blocks, .blocksF{
+    border: 1px solid white;
+}
 
 /**********Imports**********/
 

@@ -21,7 +21,7 @@ function loadTetris(){
 
     randomObject();
     setBlocks();
-    intervall = setInterval(blockFall, 500);
+    intervall = setInterval(blockFall, 100);
 }
 
 function moveBlocks(movement){
@@ -33,11 +33,9 @@ function moveBlocks(movement){
     }
     //Schneller Fallen
     if(movement == "s"){
-        intervall = setInterval(blockFall, 100);
+
     }
-    if(movement != "s"){
-        intervall = setInterval(blockFall, 500);
-    }
+
     //Change Direction Left
     if(movement == "a"){
         block1 = block[0][0] - 1; block2 = block[1][0] - 1; block3 = block[2][0] - 1; block4 = block[3][0] - 1;
@@ -95,16 +93,17 @@ function blockFall(){
     setBlocks();
 }
 function blocksFixed(){
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[0][1]+1} / ${block[0][0]+1} / auto / auto; background-color: ${farbe};"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[1][1]+1} / ${block[1][0]+1} / auto / auto; background-color: ${farbe};"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[2][1]+1} / ${block[2][0]+1} / auto / auto; background-color: ${farbe};"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[3][1]+1} / ${block[3][0]+1} / auto / auto; background-color: ${farbe};"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[0][1]+1} / ${block[0][0]+1} / auto / auto; background-color: ${farbe};" class='blocksF' class="tetris${block[0][1]+1}}"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[1][1]+1} / ${block[1][0]+1} / auto / auto; background-color: ${farbe};" class='blocksF' class="tetris${block[0][1]+1}}"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[2][1]+1} / ${block[2][0]+1} / auto / auto; background-color: ${farbe};" class='blocksF' class="tetris${block[0][1]+1}"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[3][1]+1} / ${block[3][0]+1} / auto / auto; background-color: ${farbe};" class='blocksF' class="tetris${block[0][1]+1}"></div>`
+    checkRows();
 }
 function setBlocks(){
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[0][1]+1} / ${block[0][0]+1} / auto / auto; background-color: ${farbe}" id="tetris1"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[1][1]+1} / ${block[1][0]+1} / auto / auto; background-color: ${farbe}" id="tetris2"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[2][1]+1} / ${block[2][0]+1} / auto / auto; background-color: ${farbe}" id="tetris3"></div>`
-    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[3][1]+1} / ${block[3][0]+1} / auto / auto; background-color: ${farbe}" id="tetris4"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[0][1]+1} / ${block[0][0]+1} / auto / auto; background-color: ${farbe}" class="blocks" id="tetris1"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[1][1]+1} / ${block[1][0]+1} / auto / auto; background-color: ${farbe}" class="blocks" id="tetris2"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[2][1]+1} / ${block[2][0]+1} / auto / auto; background-color: ${farbe}" class="blocks" id="tetris3"></div>`
+    document.getElementById("game").innerHTML += `<div style="grid-area: ${block[3][1]+1} / ${block[3][0]+1} / auto / auto; background-color: ${farbe}" class="blocks" id="tetris4"></div>`
 }
 function removeBlocks(){
     document.getElementById("tetris1").remove();
@@ -139,10 +138,25 @@ function rotateBlock(){
 }
 
 function checkRows(){
-
+    for(let i = 0; i < tetrisMatrix[0].length; i++){
+        let rowCheck = 0;
+        for(let j = 0; j < tetrisMatrix.length; j++){
+            if(tetrisMatrix[j][i] != " "){
+                rowCheck++;
+            }
+        }
+        if(rowCheck == 10){
+            console.log("Remove")
+            var elements = document.getElementsByClassName(`tetris${i}`);
+            while(elements.length > 0){
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+    }
 }
 function randomObject(){
     let zahl = Math.floor(Math.random()* 7 + 1);
+    zahl=2;
     let text;
     switch (zahl){  
         //3 Linie 1 in der Mitte darunter
@@ -151,6 +165,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2 + 1;block[2][1] = 0;
                 block[3][0] = tetrisMatrix.length/2;    block[3][1] = 1; 
                 blockType = "T"
+                farbe = "#a032a8"
                 break;
 
         //2 oben 2 unten
@@ -159,6 +174,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2;    block[2][1] = 1;
                 block[3][0] = tetrisMatrix.length/2 - 1;block[3][1] = 1; 
                 blockType = "O"
+                farbe = "#00f2ff"
                 break;
                 
         //4 in einer Linie
@@ -167,6 +183,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2 + 1;block[2][1] = 0;
                 block[3][0] = tetrisMatrix.length/2 - 2;block[3][1] = 0; 
                 blockType = "I"
+                farbe = "#eeff00"
                 break;
 
         //1 Block 3 darunter nach rechts
@@ -175,6 +192,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2 + 1;block[2][1] = 1;
                 block[3][0] = tetrisMatrix.length/2 + 2;block[3][1] = 1; 
                 blockType = "J"
+                farbe = "#ff9500"
                 break;
 
         //1 Block 3 darunter nach links
@@ -183,6 +201,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2 - 1;block[2][1] = 1;
                 block[3][0] = tetrisMatrix.length/2 - 2;block[3][1] = 1; 
                 blockType = "L"
+                farbe = "#2600ff"
                 break;
 
         //2 unten 2 oben nach rechts
@@ -191,6 +210,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2;    block[2][1] = 1;
                 block[3][0] = tetrisMatrix.length/2 + 1;block[3][1] = 1; 
                 blockType = "Z"
+                farbe = "#ff0400"
                 break;
 
         //2 unten 2 oben nach links
@@ -199,6 +219,7 @@ function randomObject(){
                 block[2][0] = tetrisMatrix.length/2;    block[2][1] = 1;
                 block[3][0] = tetrisMatrix.length/2 - 1;block[3][1] = 1; 
                 blockType = "S"
+                farbe = "#26ff00"
                 break;
     }
     console.log(blockType)

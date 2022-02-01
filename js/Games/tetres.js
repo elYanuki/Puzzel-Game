@@ -117,10 +117,10 @@ function rotateBlock(){
     if(blockType == "T"){
 
     }
-    if(blockType == "O"){
-
-    }
     if(blockType == "I"){
+        block[0][0] = block[0][2] + 1
+        block[0][1] = block[0][2] + 2
+        block[0][3] = block[0][2] - 1
 
     }
     if(blockType == "J"){
@@ -135,6 +135,7 @@ function rotateBlock(){
     if(blockType == "S"){
 
     }
+    setBlocks();
 }
 
 function checkRows(){
@@ -156,7 +157,6 @@ function checkRows(){
 }
 function randomObject(){
     let zahl = Math.floor(Math.random()* 7 + 1);
-    zahl=2;
     let text;
     switch (zahl){  
         //3 Linie 1 in der Mitte darunter

@@ -3,9 +3,10 @@ let lastButtonRow
 let lastButtonCol
 
 function trap(){
+    if(ifhome == false){
     if(trapState==0){
         for (let i = 0; i < document.getElementsByClassName("trap").length; i++) {
-            document.getElementsByClassName("trap")[i].style.background = "url(./img/trap_out.png)"
+            document.getElementsByClassName("trap")[i].style.background = "url(./img/blocks/trap_out.png)"
             document.getElementsByClassName("trap")[i].style.backgroundSize = "100%"
         }
         trapState = 1
@@ -14,12 +15,13 @@ function trap(){
 
     else if(trapState==1){
         for (let i = 0; i < document.getElementsByClassName("trap").length; i++) {
-            document.getElementsByClassName("trap")[i].style.background = "url(./img/trap.png)"
+            document.getElementsByClassName("trap")[i].style.background = "url(./img/blocks/trap.png)"
             document.getElementsByClassName("trap")[i].style.backgroundSize = "100%"
         }
         trapState = 0
         checkPosition()
     }
+}
 }
 
 function portal(nextY, nextX){
@@ -77,56 +79,17 @@ function tempwall(){
     
 }
 
-function ghostItem(){
-        if(posPlayer.substr(0, 2) == "gh"){ //muss vor dem edown sein weil es ja bei edown wieder weg sein soll
-            createInfoPopup(position[0], position[1],);
-        }
-        if (eDown == true) {
-
-            clearInfoPopup() //e sorgt ja für den pickup
-
-            if (posPlayer.substr(0, 2) == "gh") {
-                let ghost = document.getElementById(`ghost-${data[position[0]-1][position[1]-1].substr(3,1)}`)
-                killBlock(ghost)
-                effect = "ghost";
-                data[position[0] - 1][position[1] - 1] = "-";
-
-                let softwalls = document.getElementsByClassName("softwall")
-
-                playerSprite.classList.add("player-ghostmode")
-
-                for (let i = 0; i < softwalls.length; i++) {
-                    softwalls[i].classList.add("softwall-ghostmode")
-                }
-
-                countdown(10, "Ghost")
-
-                setTimeout(function () {
-                    effect = "normal"
-
-                    playerSprite.classList.remove("player-ghostmode")
-
-                    for (let i = 0; i < softwalls.length; i++) {
-                        softwalls[i].classList.remove("softwall-ghostmode")
-                    }
-                    checkPosition()
-                }, 10000)
-            }
-        }
-        return effect;
-}
-
 function lever(){
     let myrow = position[0]-1
     let mycol = position[1]-1
-
+    
     createInfoPopup(position[0], position[1], "press E or Enter to flip the lever");
-
+    
     if (eDown == true) {
         clearInfoPopup() //e sorgt ja für den pickup
-
+    
             let lever = document.getElementById(`lever-${data[position[0]-1][position[1]-1].substr(3,1)}`)
-
+    
             if(data[myrow][mycol].substr(6,2) == "on"){
                 data[myrow][mycol] = `${data[myrow][mycol].substr(0,6)}of`
             }
@@ -174,7 +137,7 @@ function updateObjects(){
                         }
                         if (data[parseInt(data[i][j].substr(6, 2)) - 1][parseInt(data[i][j].substr(9, 2)) - 1].substr(6, 2) == "of") { //wenn lever oder button an den coordinaten die in der zelle angegeben sind "of" ist 
                             for (let i = 0; i < 4; i++) {
-                                door.childNodes[i].style = `width: 30%;height:30%;background-color:green;`
+                                door.childNodes[i].style = `width: 30%;height:30%;`
                             }
                             data[i][j] = `${data[i][j].substr(0, 12)}op`
                         }

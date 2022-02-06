@@ -9,6 +9,44 @@ let playerSprite //style des player
 let keydown
 let posPlayer
 let Inventory = []
+let locked = []
+let levelCount = 9
+
+loadLocalStorrage()
+loadMenuHtml()
+
+function loadLocalStorrage(){
+    if(localStorage['lockedLevels']){
+    locked = JSON.parse(localStorage['lockedLevels'])
+    console.log("defined");
+    }
+
+    else{
+        locked[0] = false
+        for (let i = 1; i < 9; i++) {
+            locked[i] = true
+        }
+        console.log("set all true");
+    }
+
+    console.log(locked)
+}
+
+function writeLocalStorrage(){
+    localStorage['lockedLevels'] = JSON.stringify(locked)
+}
+
+function nextLevel(){
+    console.log(locked);
+    loadLevelHtml()
+}
+
+function enterLevel(i){
+    if(locked[i-1] == false){
+        level = 1
+        loadLevelHtml()
+    }
+}
 
 function loadLevelData(){
     ifhome = false;
@@ -34,7 +72,7 @@ function loadLevelData(){
 }
 
 function loadLevelHtml(){
-    document.getElementsByTagName("body")[0].innerHTML=`<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"></div><div id="settings"></div></div><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="level++; loadLevelHtml()"> <p>next level</p><img src="./img/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/home.png" alt="home"> </div> </div> </div> </div>`
+    document.getElementsByTagName("body")[0].innerHTML= levelHtml
     document.getElementById("handy").innerHTML += `<h1 id="date"></h1><h2 id="date2"></h2>`
     document.getElementById("handy").innerHTML += `<div id="unlock"></div>`
 
@@ -52,7 +90,13 @@ function loadLevelHtml(){
 
 function loadMenuHtml(){
     ifhome = true
-    document.getElementsByTagName("body")[0].innerHTML=`<div class="flex" id="menu-flex"> <main id="level-selector"> <div onclick="level = 1;loadLevelHtml();"> <p>Level 1</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 2</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 3</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 4</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 5</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 6</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 7</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 8</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> <div onclick="level = 1;loadLevelHtml();"> <p>Level 9</p> <img src="./img/preview_1.jpg" alt="blöd jelaufen"> </div> </main> <main id="main-info"> <div> <h2>Game Name</h2> <p>Use W A S D or the arrow Keys to move around. Press E or hold SPACE to interact with objects or Items.</p> </div> <div> <h2>Objects and Items</h2> <ul> <li> <h3>Wall</h3> <p>You shall not PAAASS</p> </li> <li> <h3>Trap</h3> <p>dangerous pointy spikes hurt</p> </li> <li> <h3>SoftWall</h3> <p>You shall pass, only if u r in the ghostmode tho</p> </li> </ul> </div> </main> </div>`
+    document.getElementsByTagName("body")[0].innerHTML = mainHTML
+
+    for (let i = 0; i < levelCount; i++) {
+        if(locked[i] == true){
+            document.getElementById(`locked-overlay-${i+1}`).style.visibility = "visible"
+        }
+    }
 }
 
 function movePlayer(){
@@ -158,6 +202,9 @@ function checkMove(nextY, nextX){
             case "tw": //temporary wall
                 return true;
                 break
+            case "ky": //key
+                return true;
+                break
             case "dr": //door
                 if (data[nextY - 1][nextX - 1].substr(3, 2) == "ky") {
                     
@@ -206,6 +253,9 @@ function checkPosition(){
             break;
         case "gh":
             ghostItem()
+            break;
+        case "ky":
+            key()
             break;
         case "sw":
             if(effect != "ghost"){
@@ -270,13 +320,13 @@ function setElements(){
                 switch(sub){
                     //wall
                     case ("wa"): 
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/wall.png); transform: rotate(${0}deg);" class="block"></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/blocks/wall.png); transform: rotate(${0}deg);" class="block"></div>`
                                     break;
                     //trap
                     case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block trap"></div>`  
                                     break;
                     //portal
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/portal.png);" class="block portal"></div>`  
+                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/blocks/portal.png);" class="block portal"></div>`  
                                     break;
                     //softwall
                     case ("sw"): 
@@ -293,14 +343,14 @@ function setElements(){
                                 back = "bush_v2_berry"
                             }
                         }
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/blocks/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
                         break;
                     //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/ghost.png); animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
+                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
                                     break;
                     //lever
                     case ("lv"): 
-                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="lever block"></div>`  
+                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="relativ"><div class="lever"></div></div>`  
                                     break;
                     //lever
                     case ("bt"): 
@@ -313,8 +363,13 @@ function setElements(){
                     case ("tw"): 
                     document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: lightgreen; display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
                                     break;
+                    //door
                     case ("dr"): 
                     document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3,2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
+                                    break;
+                    //key
+                    case ("ky"): 
+                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block key"></div>`
                                     break;
                 }
             }
@@ -451,11 +506,14 @@ function SetPlayerPos(row,column){
 
 function win(){
     if(ifhome == false){
-    document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
-    setTimeout(function(){
-        document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
-    },500)
-}
+        locked[level] = false
+        level++
+        writeLocalStorrage()
+        document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
+        setTimeout(function(){
+            document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
+        },500)
+    }
 }
 
 function Datum(temp){

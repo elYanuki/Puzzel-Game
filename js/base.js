@@ -506,8 +506,8 @@ function SetPlayerPos(row,column){
 
 function win(){
     if(ifhome == false){
-        locked[level] = false
         level++
+        locked[level] = false
         writeLocalStorrage()
         document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
         setTimeout(function(){

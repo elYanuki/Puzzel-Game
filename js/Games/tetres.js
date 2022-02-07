@@ -6,7 +6,7 @@ for(let i = 0; i < tetrisMatrix.length; i++){
     }
 }
 
-let block = [[0, 0],[0, 0],[0, 0],[0, 0]]   
+let block = [[0, 0],[0, 0],[0, 0],[0, 0]]   // [Breite1, Höhe1][Breite2, Höhe2]...
 let blockType;
 let farbe;
 let intervall
@@ -21,7 +21,7 @@ function loadTetris(){
 
     randomObject();
     setBlocks();
-    intervall = setInterval(blockFall, 100);
+    intervall = setInterval(blockFall, 500);
 }
 
 function moveBlocks(movement){
@@ -118,10 +118,34 @@ function rotateBlock(){
 
     }
     if(blockType == "I"){
-        block[0][0] = block[0][2] + 1
-        block[0][1] = block[0][2] + 2
-        block[0][3] = block[0][2] - 1
+        if(block[0][1] != block[1][1]){
+            let height = block[1][1];
+            //Block 1
+                block[0][0] = block[1][0] - 1;
+                block[0][1] = height;
+            //Block 2
+            if(tetrisMatrix[block[2][0]+1][height] == " "){
+                block[2][0] = block[1][0] + 1;
+                block[2][1] = height;
+            }
+            //Block 3
+            if(tetrisMatrix[block[3][0]+2][height] == " "){
+                block[3][0] = block[1][0] + 2;
+                block[3][1] = height;
+            }
 
+        } else{
+            let width = block[1][0];
+            //Block 1
+            block[0][0] = width;
+            block[0][1] = block[1][1] - 1;
+            //Block 2
+            block[2][0] = width;
+            block[2][1] = block[1][1] + 1;
+            //Block 3
+            block[3][0] = width;
+            block[3][1] = block[1][1] + 2;
+        }
     }
     if(blockType == "J"){
 
@@ -135,6 +159,7 @@ function rotateBlock(){
     if(blockType == "S"){
 
     }
+    removeBlocks();
     setBlocks();
 }
 
@@ -157,6 +182,7 @@ function checkRows(){
 }
 function randomObject(){
     let zahl = Math.floor(Math.random()* 7 + 1);
+    zahl = 3;
     let text;
     switch (zahl){  
         //3 Linie 1 in der Mitte darunter
@@ -222,5 +248,4 @@ function randomObject(){
                 farbe = "#26ff00"
                 break;
     }
-    console.log(blockType)
 }

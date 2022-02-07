@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>GTA 6</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <script src='./js/base.js' defer></script>
     <script src='./js/levelData.js' ></script>
     <script src='./js/items.js' ></script>
@@ -14,41 +14,86 @@
 <body>
     <div class="flex" id="menu-flex">
         <main id="level-selector">
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="enterLevel(1)">
+                <div class="relativ">
+                <div id="locked-overlay-1" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 1</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_1.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 2;loadLevelHtml();">
+            <div onclick="level = 2; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-2" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 2</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_2.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 3;loadLevelHtml();">
+            <div onclick="level = 3; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-3" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 3</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_3.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 4; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-4" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 4</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_4.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 5; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-5" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 5</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_5.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 6; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-6" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 6</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_6.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 7; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-7" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 7</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_7.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 8; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-8" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 8</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_8.jpg" alt="preview image">
+                </div>
             </div>
-            <div onclick="level = 1;loadLevelHtml();">
+            <div onclick="level = 9; loadLevelHtml();">
+                <div class="relativ">
+                <div id="locked-overlay-9" class="locked-overlay">
+                    <img src="./img/icons/lock.png" alt="locked">
+                </div>
                 <p>Level 9</p>
-                <img src="./img/preview_1.jpg" alt="blöd jelaufen">
+                <img src="./img/preview/preview_9.jpg" alt="preview image">
+                </div>
             </div>
         </main>
         <main id="main-info">

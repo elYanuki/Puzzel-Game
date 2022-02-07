@@ -10,7 +10,7 @@ img{
 }
 
 body{
-    /* background-image: url(./img/background.png); */
+    /* : url(./img/background.png); */
     background-color: rgb(39, 39, 39);
     overflow: hidden;
 }
@@ -53,7 +53,7 @@ p{
     margin: 5vh 0.5vh 5vh 5vh;
     align-items: center;
     justify-items: center;
-    background-image: url(./img/ground1.png);
+    background-image: url(../img/ground1.png);
     background-size: 100%;
     border: 0.1rem solid rgb(156, 156, 156);
 }
@@ -62,7 +62,7 @@ p{
     grid-auto-columns: 2.25vh;
     grid-auto-rows: 2.25vh;
     text-align: center;
-    background-image: url(./img/handy.png);
+    background-image: url(../img/handy.png);
     border: rgb(195, 195, 195) 2px solid;
     border-radius: 0 1vw 1vw 0;
     width: 45vh;
@@ -110,6 +110,14 @@ p{
     width: 45vh;
     height: 90vh;
     margin: 5vh 2vh 5vh 5vh;
+}
+
+#items{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 45vh;
+    gap: 1vh;
+    height: 14vh;
 }
 
 #countdown-box{
@@ -207,7 +215,7 @@ p{
     grid-template-columns: 1fr 1fr 1fr;
     width: 40vw;
     height: fit-content;
-    gap: 1rem;
+    gap: 4%;
 }
 
 #level-selector div{
@@ -222,7 +230,7 @@ p{
 }
 
 #level-selector div:hover {
-    transform:scale(1.05);
+    transform:scale(1.03);
     font-size: 3rem;
 }
 
@@ -270,6 +278,20 @@ p{
 
 #main-info div ul{
     margin-left: 1rem;
+}
+
+.locked-overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    opacity: 0.6;
+    visibility: hidden;
+}
+
+.locked-overlay img{
+    width: 80%;
+    height: 80%;
 }
 
 /*---------items and player---------*/
@@ -362,8 +384,12 @@ p{
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
     animation-timing-function:linear;
+    background-image: url(../img/items/ghost.png);
 }
 
+.key{
+    background-image: url(../img/items/key.png);
+}
 /*---------blocks---------*/
 
 .block{
@@ -400,7 +426,7 @@ p{
 }
 
 .trap{
-    background-image: url(./img/trap.png);
+    background-image: url(../img/blocks/trap.png);
     background-size: 100%;
     width: 80%;
     height: 80%;
@@ -422,7 +448,6 @@ p{
 .door div{
     width: 100%;
     height: 100%;
-    background-color: red;
     transition: all 0.5s;
 }
 
@@ -445,8 +470,9 @@ p{
 
 .sub-door{
     /* border: 0.1rem solid black; */
-    background-image: url(./img/door_1.png);
+    background-image: url(../img/blocks/door_1.png);
     background-size: cover;
+    background-color: blue;
 }
 
 .button{
@@ -455,9 +481,17 @@ p{
 
 .lever{
     background-color: lightgreen;
+    width: 100%;
+    height: 100%;
 }
 
-/*---------fields---------*/
+.relativ{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/*---------minigames---------*/
 
 .fields{
     width: 80%;
@@ -473,22 +507,19 @@ p{
 
 @font-face {
     font-family: beba;
-    src: url(./imports/BebasNeue-Regular.ttf);
+    src: url(../imports/BebasNeue-Regular.ttf);
 }
     
 @font-face {
     font-family: light;
-    src: url(./imports/OpenSans-VariableFont_wdth\,wght.ttf);
+    src: url(../imports/OpenSans-VariableFont_wdth\,wght.ttf);
 }
 /**********Keyframes**********/
 
 @keyframes popup-move {
     from{
-        margin-bottom
-        
-        : 0;
+        margin-bottom: 0;
     }
-
     to{
         margin-bottom: 0.5rem;
     }

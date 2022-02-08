@@ -41,9 +41,13 @@ function nextLevel(){
     loadLevelHtml()
 }
 
-function enterLevel(i){
+function enterLevel(i, force){
     if(locked[i-1] == false){
-        level = 1
+        level = i
+        loadLevelHtml()
+    }
+    if(force == 1){
+        level = i
         loadLevelHtml()
     }
 }

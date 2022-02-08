@@ -1,5 +1,5 @@
 function lvl1(){
-    let levelTemplate = [["lv-01-of","-","bt-02-on","ky","gh-0","-","sw","-","-","-",],["-","-","-","wa","-","-","tr","-","-","-",],["-","-","-","wa","-","po-09-09","sw","tr","-","-",],["wa","tw-00","wa","wa","wa","wa","wa","-","-","-",],["tr","tw-01","tr","-","-","-","-","-","-","-",],["-","-","-","-","-","-","dr-01-01-01-y-op","-","-","-",],["-","-","-","-","-","-","-","-","-","-",],["sw","sw","sw","sw","-","dr-02-01-03-cl","dr-03-01-03-cl","-","-","-",],["-","-","-","sw","-","-","-","-","po-03-06s","-",],["-","-","-","sw","-","-","-","-","-","-",],["1","2","10","1"]]
+    let levelTemplate = [["lv-01-of","-","bt-02-on","ky","gh-0","-","sw","-","-","-",],["-","-","-","wa","-","-","tr","-","-","-",],["-","-","-","wa","-","po-09-09","sw","tr","-","-",],["wa","tw-00","wa","wa","wa","wa","wa","-","-","-",],["tr","tw-01","tr","-","-","-","-","-","-","-",],["-","-","-","-","-","-","dr-01-01-01-y-op","-","-","-",],["-","-","-","-","-","-","-","-","-","-",],["sw","sw","sw","sw","-","dr-02-01-03-cl","dr-03-01-03-cl","-","-","-",],["-","-","-","sw","-","-","-","-","po-03-06s","tr",],["-","-","-","sw","-","-","-","-","-","-",],["1","2","10","1"]]
     return levelTemplate
     }
 
@@ -13,9 +13,14 @@ function lvl3(){
     return levelTemplate
     }
 
+function lvl4() {
+    let levelTemplate = [["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","tr","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-",this,"-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","bt-00-on","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","dr-01-05-20-cl","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","lv-00-09-14","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","tr","-","-","-","-","-","tr","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","dr-00-lksdfjhgö-cl","-","-","-","tw-00","tw-01","tw-02","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","tr","-","-",],["-","-","-","-","-","-","tr","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","tr","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","po-09-09","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-","-",],["1","1","2","2"]]
+    return levelTemplate
+}
+
 var mainHTML = `<div class="flex" id="menu-flex">
 <main id="level-selector">
-    <div onclick="enterLevel(1)">
+    <div onclick="enterLevel(1,this)">
         <div class="relativ">
         <div id="locked-overlay-1" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -24,7 +29,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_1.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(2)">
+    <div onclick="enterLevel(2,this)">
         <div class="relativ">
         <div id="locked-overlay-2" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -33,7 +38,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_2.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(3)">
+    <div onclick="enterLevel(3,this)">
         <div class="relativ">
         <div id="locked-overlay-3" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -42,7 +47,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_3.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(4)">
+    <div onclick="enterLevel(4,this)">
         <div class="relativ">
         <div id="locked-overlay-4" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -51,7 +56,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_4.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(5)">
+    <div onclick="enterLevel(5,this)">
         <div class="relativ">
         <div id="locked-overlay-5" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -60,7 +65,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_5.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(6)">
+    <div onclick="enterLevel(6,this)">
         <div class="relativ">
         <div id="locked-overlay-6" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -69,7 +74,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_6.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(7)">
+    <div onclick="enterLevel(7,this)">
         <div class="relativ">
         <div id="locked-overlay-7" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -78,7 +83,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_7.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(8)">
+    <div onclick="enterLevel(8,this)">
         <div class="relativ">
         <div id="locked-overlay-8" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -87,7 +92,7 @@ var mainHTML = `<div class="flex" id="menu-flex">
         <img src="./img/preview/preview_8.jpg" alt="preview image">
         </div>
     </div>
-    <div onclick="enterLevel(9)">
+    <div onclick="enterLevel(9,this)">
         <div class="relativ">
         <div id="locked-overlay-9" class="locked-overlay">
             <img src="./img/icons/lock.png" alt="locked">
@@ -122,4 +127,37 @@ var mainHTML = `<div class="flex" id="menu-flex">
 </main>
 </div>`
 
-var levelHtml = `<div id="countdown-box"><p id="countdown-text"></p><div id="countdown"></div></div><div class="flex"><main id="board"><div id="player"><div id="player-sprite"></div></div> <div id="info-relative"><div id="info"><p id="info-text">Press E to pick up the item.</p></div><div id="info-arrow"></div></div></main><div id="handy"></div><div id="settings"><div id="items"></div></div></div><div id="win-overlay"> <div id="win-box"> <h1>Level Completed</h1> <div> <div onclick="nextLevel()"> <p>next level</p><img src="./img/icons/arrow.png" alt="arrow"> </div> <div onclick="loadMenuHtml()"> <p>home</p><img src="./img/icons/home.png" alt="home"> </div> </div> </div> </div>`
+var levelHtml = `<div id="countdown-box">
+<p id="countdown-text"></p>
+<div id="countdown"></div>
+</div>
+<div class="flex">
+<main id="board">
+    <div id="player">
+        <div id="player-sprite"></div>
+    </div>
+    <div id="info-relative">
+        <div id="info">
+            <p id="info-text">Press E to pick up the item.</p>
+        </div>
+        <div id="info-arrow"></div>
+    </div>
+</main>
+<div id="handy"></div>
+<div id="settings">
+    <div id="items"></div>
+</div>
+</div>
+<div id="win-overlay">
+<div id="win-box">
+    <h1>Level Completed</h1>
+    <div>
+        <div onclick="nextLevel()">
+            <p>next level</p><img src="./img/icons/arrow.png" alt="arrow">
+        </div>
+        <div onclick="loadMenuHtml()">
+            <p>home</p><img src="./img/icons/home.png" alt="home">
+        </div>
+    </div>
+</div>
+</div>`

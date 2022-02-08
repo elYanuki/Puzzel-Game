@@ -11,7 +11,7 @@ img{
 
 body{
     /* : url(./img/background.png); */
-    background-color: rgb(39, 39, 39);
+    background-color: var(--main-gray);
     overflow: hidden;
 }
 
@@ -22,6 +22,7 @@ h1{
 h2{
     font-family: beba;
     font-size: 1.6rem;
+    color: var(--accent-color);
 }
 
 h3{
@@ -242,6 +243,8 @@ p{
 #level-selector div p{
     text-align: center;
     position: absolute;
+    /* color: var(--accent-color); */
+    /* color: var(--accent-second); */
     color: white;
     z-index: 2;
     font-family: beba;
@@ -259,12 +262,12 @@ p{
 #main-info{
     height: fit-content;
     width: 40vw;
-    height: 40vw    ;
-    color: rgb(228, 228, 228);
+    height: 40vw;
+    color: white;
 }
 
 #main-info div{
-    background-color: rgb(78, 78, 78);
+    background-color: var(--accent-gray);
     margin-bottom: 1rem;
     padding: 1rem;
     box-sizing: border-box;
@@ -282,10 +285,10 @@ p{
 
 .locked-overlay{
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     z-index: 5;
-    opacity: 0.6;
+    opacity: 0.45;
     visibility: hidden;
 }
 
@@ -430,6 +433,7 @@ p{
     background-size: 100%;
     width: 80%;
     height: 80%;
+    transition: all 100ms !important;
 }
 
 .portal{
@@ -624,5 +628,8 @@ p{
 /**********Variables**********/
 :root {
     --tempwall-movement: 0.2rem;
-    --maincolor:gray
+    --main-gray: rgb(36,36,36);
+    --accent-gray: rgb(78,78,78); 
+    --accent-color: #dd8500;
+    --accent-second: #ffac2f;
 }

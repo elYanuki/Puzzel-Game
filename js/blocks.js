@@ -123,7 +123,7 @@ function updateObjects(){
     for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data.length; j++) { //cycled durch jede zelle   
             if(data[i][j]){
-                if (data[i][j].substr(0, 2) == "dr") {//wenn zelle door ist && kein key gesteurtes lock
+                if(data[i][j].substr(0, 2) == "dr") {//wenn zelle door ist && kein key gesteurtes lock
                     let door = document.getElementById(`door-${data[i][j].substr(3, 2)}`)
                     if (data[i][j].substr(2, 2) == "ky") {
                         

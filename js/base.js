@@ -41,11 +41,22 @@ function nextLevel(){
     loadLevelHtml()
 }
 
-function enterLevel(i){
+function enterLevel(i, elem){
     if(locked[i-1] == false){
-        level = 1
+        level = i
         loadLevelHtml()
     }
+    else{
+        elem.style.boxShadow = "0 0 2rem rgb(160, 0, 0)"
+        setTimeout(function(){
+            elem.style.boxShadow = "none"
+        },300)
+    }
+}
+
+function forceEnterLevel(i){
+    level = i
+    loadLevelHtml()
 }
 
 function loadLevelData(){
@@ -94,7 +105,9 @@ function loadMenuHtml(){
 
     for (let i = 0; i < levelCount; i++) {
         if(locked[i] == true){
-            document.getElementById(`locked-overlay-${i+1}`).style.visibility = "visible"
+            let overlay = document.getElementById(`locked-overlay-${i+1}`)
+            overlay.style.visibility = "visible"
+            overlay.parentElement.getElementsByTagName("p")[0].style.visibility = "hidden"
         }
     }
 }
@@ -506,8 +519,8 @@ function SetPlayerPos(row,column){
 
 function win(){
     if(ifhome == false){
-        level++
-        locked[level] = false
+                locked[level] = false
+level++
         writeLocalStorrage()
         document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
         setTimeout(function(){

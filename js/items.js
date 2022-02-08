@@ -58,7 +58,7 @@ function key(){
 
     if (eDown == true) {
         clearInfoPopup() //e sorgt ja für den pickup
-        document.getElementById("items").innerHTML = `<div><img src="./img/blocks/key.png"></div>`
+        document.getElementById("items").innerHTML = `<div><img src="./img/items/key.png" alt="key"></div>`
     }
 }
 

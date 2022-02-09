@@ -16,7 +16,7 @@ function loadTetris() {
     grid-template-columns: repeat(${tetrisMatrix.length}, 1fr); grid-template-rows: repeat(${tetrisMatrix[0].length}, 1fr);`
 
     //Background
-    styleS += "background-image: url(./img/tetris_background.jpg);"
+    styleS += "background-image: url(./img/minigames/tetris_background.jpg);"
     document.getElementById("game").style += styleS;
 
     randomObject();

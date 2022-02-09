@@ -1,11 +1,11 @@
-let position = [2,2]//[row][column]
+let position = [2, 2]//[row][column]
 let data
 let effect = "normal"
 let eDown = false
 let noMove = false
 let level
-let player //position des player
-let playerSprite //style des player
+let player //position player
+let playerSprite //style player
 let keydown
 let posPlayer
 let Inventory = []
@@ -15,112 +15,115 @@ let levelCount = 9
 loadLocalStorrage()
 loadMenuHtml()
 
-function loadLocalStorrage(){
-    if(localStorage['lockedLevels']){
-    locked = JSON.parse(localStorage['lockedLevels'])
-    console.log("defined");
+function loadLocalStorrage() {
+    if (localStorage['lockedLevels']) { //in case there is information in the localstorrage
+        locked = JSON.parse(localStorage['lockedLevels'])
     }
 
-    else{
+    else { //in case the local storrage is empty - all are defaulted to true
         locked[0] = false
         for (let i = 1; i < 9; i++) {
             locked[i] = true
         }
-        console.log("set all true");
     }
-
-    console.log(locked)
 }
 
-function writeLocalStorrage(){
+function writeLocalStorrage() {
     localStorage['lockedLevels'] = JSON.stringify(locked)
 }
 
-function nextLevel(){
-    console.log(locked);
+function nextLevel() {
     loadLevelHtml()
 }
 
-function enterLevel(i, elem){
-    if(locked[i-1] == false){
+function enterLevel(i, elem) {
+    if (locked[i - 1] == false) { //checks if cklicked level is actually enterable
         level = i
         loadLevelHtml()
     }
-    else{
+    else { //level is locked
         elem.style.boxShadow = "0 0 2rem rgb(160, 0, 0)"
-        setTimeout(function(){
+        setTimeout(function () {
             elem.style.boxShadow = "none"
-        },300)
+        }, 300)
     }
 }
 
-function forceEnterLevel(i){
+//for thesting, lets you enter locked levels
+function forceEnterLevel(i) {
     level = i
     loadLevelHtml()
 }
 
-function loadLevelData(){
-    ifhome = false;
-    switch (level){
-        case 1: data = lvl1();break;
-        case 2: data = lvl2();break;
-        case 3: data = lvl3();break;
-        case 4: data = lvl4();break;
+//loads array from the 
+function loadLevelData() {
+    ifhome = false; //not executed if user is on the homescreen
+    switch (level) {
+        case 1: data = lvl1(); break;
+        case 2: data = lvl2(); break;
+        case 3: data = lvl3(); break;
+        case 4: data = lvl4(); break;
+        case 5: data = lvl1(); break;
+        case 6: data = lvl2(); break;
+        case 7: data = lvl3(); break;
+        case 8: data = lvl4(); break;
+        case 9: data = lvl4(); break;
     }
 
     effect = "normal"
     noMove = "false"
 
-    document.getElementById("player").style = `grid-area: ${data[data.length-1][0]} / ${data[data.length-1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
-    position = [data[data.length-1][0],data[data.length-1][1]] //wie oben nur für gespeicherte pos
+    document.getElementById("player").style = `grid-area: ${data[data.length - 1][0]} / ${data[data.length - 1][1]} / auto / auto;` //setzt startpos des character auf coordinaten in letzter zeile der data
+    position = [data[data.length - 1][0], data[data.length - 1][1]] //wie oben nur für gespeicherte pos
 
     let gridItems = "1fr"
-    for (let i = 0; i < data.length-2; i++) { //lässt breite des array die breite des grid bestimmen
+    for (let i = 0; i < data.length - 2; i++) { //lässt breite des array die breite des grid bestimmen
         gridItems += " 1fr"
     }
     document.getElementById("board").style = `grid-template-columns:${gridItems};grid-template-rows:${gridItems};` //setzt grid breite und höhe
 
 }
 
-function loadLevelHtml(){
-    document.getElementsByTagName("body")[0].innerHTML= levelHtml
+//loads html body for a level
+function loadLevelHtml() {
+    document.getElementsByTagName("body")[0].innerHTML = levelHtml
     document.getElementById("handy").innerHTML += `<h1 id="date"></h1><h2 id="date2"></h2>`
     document.getElementById("handy").innerHTML += `<div id="unlock"></div>`
 
     loadLevelData();
     setElements();
-    updateObjects()
+    updateObjects();//so that doors etc are in the right state
     player = document.getElementById('player')
     playerSprite = document.getElementById('player-sprite')
 
     loadTime();
-    
+
     setInterval(loadTime, 1000);
-    setInterval(trap,3000);
+    setInterval(trap, 3000);
 }
 
-function loadMenuHtml(){
+function loadMenuHtml() {
     ifhome = true
     document.getElementsByTagName("body")[0].innerHTML = mainHTML
 
-    for (let i = 0; i < levelCount; i++) {
-        if(locked[i] == true){
-            let overlay = document.getElementById(`locked-overlay-${i+1}`)
+    for (let i = 0; i < levelCount; i++) { //sets visibility of locked icons
+        if (locked[i] == true) {
+            let overlay = document.getElementById(`locked-overlay-${i + 1}`)
             overlay.style.visibility = "visible"
             overlay.parentElement.getElementsByTagName("p")[0].style.visibility = "hidden"
         }
     }
 }
 
-function movePlayer(){
-    if(effect == "handy"){
-        switch (keydown){
+function movePlayer() {
+    if (effect == "handy") { //if you are in a phone minigame the movement is in the minigame
+        switch (keydown) {
             case 0: //up w
                 moveBlocks("w");
                 break
             case 1: //down s
-                
-            moveBlocks("s")
+
+                moveBlocks("s")
                 break
             case 2: //left a
                 moveBlocks("a")
@@ -129,63 +132,63 @@ function movePlayer(){
                 moveBlocks("d")
                 break
         }
-    } else{
-        if(noMove != true){
-        let move = false;
-        let pos0 = position[0]
-        let pos1 = position[1]
-    
-        switch (keydown){
-            case 0: //up w
-                move = checkMove(Math.max(--pos0, 1), pos1);
-                if(move == true){
-                    position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
-                    /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
-                }   
-                break
-            case 1: //down s
-                move = checkMove(++pos0, pos1);
-                if(move == true){
-                    position[0] = Math.min(++position[0], data[1].length)
-                }
-                break
-            case 2: //left a
-                move = checkMove(pos0, --pos1)
-                if(move == true){
-                    position[1] = Math.max(--position[1], 1)
-                }          
-                break
-            case 3: //right d 
-                move = checkMove(pos0, ++pos1)
-                if(move == true){
-                    position[1] = Math.min(++position[1], data[1].length)
-                }   
-                break
+    } else {
+        if (noMove != true) { //teoretical fix for portal(not working sadge)
+            let move = false;
+            let pos0 = position[0]
+            let pos1 = position[1]
+
+            switch (keydown) {
+                case 0: //up w
+                    move = checkMove(Math.max(--pos0, 1), pos1);
+                    if (move == true) {
+                        position[0] = Math.max(--position[0], 1) //1 damit nicht aus dem feld läuft
+                        /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
+                    }
+                    break
+                case 1: //down s
+                    move = checkMove(++pos0, pos1);
+                    if (move == true) {
+                        position[0] = Math.min(++position[0], data[1].length)
+                    }
+                    break
+                case 2: //left a
+                    move = checkMove(pos0, --pos1)
+                    if (move == true) {
+                        position[1] = Math.max(--position[1], 1)
+                    }
+                    break
+                case 3: //right d 
+                    move = checkMove(pos0, ++pos1)
+                    if (move == true) {
+                        position[1] = Math.min(++position[1], data[1].length)
+                    }
+                    break
+            }
+            setTimeout(function () {
+                player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
+            }, 5);
+
+            /* setTimeout(function () {
+                player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
+                playerSprite.style = "transition: none;transform: translateY(0rem);"
+            }, 500) */
+
+            /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
+
+            checkPosition();
+            /* setTimeout(movePlayer, 50); */
         }
-        setTimeout(function () {
-        player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-        }, 5);
-    
-        /* setTimeout(function () {
-            player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;` 
-            playerSprite.style = "transition: none;transform: translateY(0rem);"
-        }, 500) */
-        
-        /* console.log("coordinates: r:" + position[0] + " c:" + position[1]); */
-    
-        checkPosition();
-        /* setTimeout(movePlayer, 50); // async recursion */
     }
-}
 }
 
-//Diese Funktion schaut ob der nächste Schritt von dem Spieler möglich ist
-function checkMove(nextY, nextX){
-    if(noMove == true){
+//checks if the players next step is possible / valid
+function checkMove(nextY, nextX) {
+    if (noMove == true) {
         return false
     }
-    else if(data[nextY-1][nextX-1]){
-        switch (data[nextY-1][nextX-1].substr(0,2)){
+    else if (data[nextY - 1][nextX - 1]) {
+        switch (data[nextY - 1][nextX - 1].substr(0, 2)) {
             case "wa": //wall
                 return false;
                 break
@@ -196,7 +199,7 @@ function checkMove(nextY, nextX){
                 return true;
                 break
             case "tr": //trap
-                if(trapState==1){
+                if (trapState == 1) {
                     dead();
                 }
                 return true;
@@ -206,21 +209,18 @@ function checkMove(nextY, nextX){
                 return true;
                 break
             case "sw": //softwall
-                if(effect == "ghost"){
+                if (effect == "ghost") {
                     return true;
-                } else{
+                } else {
                     return false;
                 }
                 break
             case "tw": //temporary wall
                 return true;
                 break
-            case "ky": //key
-                return true;
-                break
             case "dr": //door
                 if (data[nextY - 1][nextX - 1].substr(3, 2) == "ky") {
-                    
+
                 }
                 else {
                     if (data[nextY - 1][nextX - 1].substr(12, 2) == "op") {
@@ -236,44 +236,41 @@ function checkMove(nextY, nextX){
                 break
         }
     }
-    else{ //feld ist leer - kann betreten werden
+    else { //feld ist empty - can be entered
         return true
     }
 }
 
-//schaut ob ein Item auf dem Feld auf dem der Spielr steht, liegt
+//checks if there is a item or simmilar on the field the player is currently standing on
 let active = false;
-function checkPosition(){
-    posPlayer = data[position[0]-1][position[1]-1];
-    switch(posPlayer.substr(0,2)){
-        case "lo": 
+function checkPosition() {
+    posPlayer = data[position[0] - 1][position[1] - 1];
+    switch (posPlayer.substr(0, 2)) {
+        case "lo": //locked item
             if (eDown == true) {
                 active = true;
                 effect = "handy";
                 clearInfoPopup();
                 handyUnlock();
-            } else if(active == false){
+            } else if (active == false) {
                 createInfoPopup(position[0], position[1],)
             }
             return true;
-        case "tw":
-            if (posPlayer.substr(6,4)!='kill'){
-            tempwall()
+        case "tw": //temporary wall
+            if (posPlayer.substr(6, 4) != 'kill') {
+                tempwall()
             }
-            if(posPlayer.substr(6,4)=='kill'){
+            if (posPlayer.substr(6, 4) == 'kill') {
                 dead()
             }
             break;
-        case "gh":
+        case "gh": //ghost
             ghostItem()
             break;
-        case "ky":
-            key()
-            break;
         case "sw":
-            if(effect != "ghost"){
+            if (effect != "ghost") {
                 dead()
-                }
+            }
             break;
         case "wn":
             win()
@@ -287,7 +284,7 @@ function checkPosition(){
         case "dr":
             break
         case "tr":
-            if(trapState==1){
+            if (trapState == 1) { //trap is extendet
                 dead();
             }
             break
@@ -296,26 +293,26 @@ function checkPosition(){
             break
     }
 
-    if(position[0] == data[data.length-1][2] && position[1] == data[data.length-1][3]){
+    if (position[0] == data[data.length - 1][2] && position[1] == data[data.length - 1][3]) {
         win()
     }
 
-    if(posPlayer.substr(0,2) != "bt"){
+    if (posPlayer.substr(0, 2) != "bt") {
         resetButtons()
     }
-    //falls du das return tru hier absochtlich hattest.. sryyy habs put gemacht
 }
 
-//Platziert alle Gegenstände auf dem Spiel
-function setElements(){
+//places all items and blocks that are listed in the array
+function setElements() {
     let last = false
-    for(let i = 0; i < data.length; i++){
-        for(let j = 0; j < data[0].length; j++){
-            if(data[i][j]){
-                let chooseRNG = Math.random()
-                let rotateRNG = Math.random()
-                let sub = data[i][j].substr(0,2)
-                let back
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[0].length; j++) {
+            if (data[i][j]) {
+                let chooseRNG = Math.random() //texture variation
+                let rotateRNG = Math.random() //rotation variation
+                let sub = data[i][j].substr(0, 2)
+                let back //bacground image
+
                 /* if(rotateRNG <0.25){
                     rotateRNG = 90
                 }
@@ -328,25 +325,24 @@ function setElements(){
                 else{
                     rotateRNG = 0
                 } */
+
                 rotateRNG = 0
 
-                switch(sub){
-                    //wall
-                    case ("wa"): 
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/blocks/wall.png); transform: rotate(${0}deg);" class="block"></div>`
-                                    break;
-                    //trap
-                    case ("tr"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block trap"></div>`  
-                                    break;
-                    //portal
-                    case ("po"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-image: url(./img/blocks/portal.png);" class="block portal"></div>`  
-                                    break;
-                    //softwall
-                    case ("sw"): 
+                switch (sub) {
+                    case ("wa"): //wall
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/blocks/wall.png); transform: rotate(${0}deg);" class="block"></div>`
+                        break;
+                    case ("tr"): //trap
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto;" class="block trap"></div>`
+                        break;
+                    case ("po"): //portal
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/blocks/portal.png);" class="block portal"></div>`
+                        break;
+                    case ("sw"): //softwall
                         if (chooseRNG < 0.4) {
                             back = "bush_v2"
                         }
-                        else {
+                        else { //prevents to many bushes next to each other - better distribution
                             if (last == true) {
                                 back = "bush_v2"
                                 last = false
@@ -356,47 +352,45 @@ function setElements(){
                                 back = "bush_v2_berry"
                             }
                         }
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/blocks/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`  
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image: url(./img/blocks/${back}.png);  transform: rotate(${rotateRNG}deg);" class="block softwall"></div>`
                         break;
-                    //ghost
-                    case ("gh"): document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3,1)}" style="grid-area: ${i+1} / ${j+1} / auto / auto; animation-delay:-${Math.random()*6}s" class="ghost block"></div>`  
-                                    break;
-                    //lever
-                    case ("lv"): 
-                    document.getElementById("board").innerHTML += `<div id="lever-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="relativ"><div class="lever"></div></div>`  
-                                    break;
-                    //lever
-                    case ("bt"): 
-                    document.getElementById("board").innerHTML += `<div id="button-${data[i][j].substr(3,2)}" style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="button block"></div>`  
-                                    break;
-                    //locked
-                    case ("lo"): document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`  
-                                    break;
-                    //temp wall
-                    case ("tw"): 
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; background-color: lightgreen; display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3,2)}"></div></div>`
-                                    break;
-                    //door
-                    case ("dr"): 
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3,2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
-                                    break;
-                    //key
-                    case ("ky"): 
-                    document.getElementById("board").innerHTML += `<div style="grid-area: ${i+1} / ${j+1} / auto / auto;" class="block key"></div>`
-                                    break;
+                    case ("gh"): //ghost
+                        document.getElementById("board").innerHTML += `<div id="ghost-${data[i][j].substr(3, 1)}" style="grid-area: ${i + 1} / ${j + 1} / auto / auto; animation-delay:-${Math.random() * 6}s" class="ghost block"></div>`
+                        break;
+                    case ("lv"): //lever
+                        if (data[i][j].substr(6, 2) == "on") {
+                            back = "url(../img/blocks/lever_on.png)"
+                        }
+                        else if (data[i][j].substr(6, 2) == "of") {
+                            back = "url(../img/blocks/lever_off.png)"
+                        }
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image:${back};" class="lever" id="lever-${data[i][j].substr(3, 2)}"></div>`
+                        break;
+                    case ("bt"): //button
+                        document.getElementById("board").innerHTML += `<div id="button-${data[i][j].substr(3, 2)}" style="grid-area: ${i + 1} / ${j + 1} / auto / auto;" class="button block"></div>`
+                        break;
+                    case ("lo"): //locked
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`
+                        break;
+                    case ("tw"): //temp wall
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-color: lightgreen; display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3, 2)}"></div></div>`
+                        break;
+                    case ("dr"): //door
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3, 2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
+                        break;
                 }
             }
         }
     }
-    document.getElementById("board").innerHTML += `<div style="grid-area: ${data[data.length-1][2]} / ${data[data.length-1][3]} / auto / auto; background-color: gold" class="block"></div>`
+    document.getElementById("board").innerHTML += `<div style="grid-area: ${data[data.length - 1][2]} / ${data[data.length - 1][3]} / auto / auto; background-color: gold" class="block"></div>`
     movePlayer()
 }
 
-function createInfoPopup(x,y,text) {
-    if(text) { //dont specifie text to use default
+function createInfoPopup(x, y, text) {
+    if (text) { //text specified - use that text
         document.getElementById("info-text").innerHTML = text
     }
-    else{
+    else { //no text specified - use default text
         document.getElementById("info-text").innerHTML = `Press E or Enter to pick up the item`
     }
     document.getElementById("info-relative").style = `grid-area: ${x} / ${y} / auto / auto;visibility:visible;`
@@ -407,10 +401,10 @@ function createInfoPopup(x,y,text) {
     setTimeout(function () {
         document.getElementById("info-text").style.opacity = "1"
     }, 300)
-    
+
 }
 
-function clearInfoPopup(){
+function clearInfoPopup() {
     document.getElementById("info-text").style.opacity = "0"
     document.getElementById("info").style.width = "0rem"
     document.getElementById("info").style.opacity = "0"
@@ -418,60 +412,63 @@ function clearInfoPopup(){
     document.getElementById("info-relative").style.visibility = "hidden"
 }
 
-function countdown(duration, name){
+function countdown(duration, name) {
     document.getElementById("countdown").style = `animation-name: countdown; animation-duration: ${duration}s;`
     document.getElementById("countdown-text").innerHTML = name;
 
     setTimeout(function () {
         document.getElementById("countdown-text").innerHTML = ""
-    }, duration*1000)
+    }, duration * 1000)
 }
 
 //Select Keys for Movement
-document.addEventListener('keydown', function(event) {
-/*     console.log(event); */
+document.addEventListener('keydown', function (event) {
+    /*     console.log(event); */
     if (data) {
         switch (event.keyCode) {
+            //W
             case 87:
-            case 38:
-            case 'W': keydown = 0; movePlayer(); break;
+            case 38:keydown = 0; movePlayer(); break;
+            //S
             case 83:
-            case 40:
-            case 'S': keydown = 1; movePlayer();break;
+            case 40:keydown = 1; movePlayer(); break;
+            //A
             case 65:
-            case 37:
-            case 'A': keydown = 2; movePlayer();break;
+            case 37:keydown = 2; movePlayer(); break;
+            //D
             case 68:
-            case 39:
-            case 'D': keydown = 3; movePlayer();break;
+            case 39:keydown = 3; movePlayer(); break;
+            // E
             case 69:
             case 13: eDown = true; checkPosition(); break
         }
     }
 });
 
-    document.addEventListener('keyup', function(event) {
-        if (data) {
-            switch (event.keyCode) {
-                case 87:
-                case 38:
-                case 'W': keydown = ""; break;
-                case 83:
-                case 40:
-                case 'S': keydown = ""; break;
-                case 65:
-                case 37:
-                case 'A': keydown = ""; break;
-                case 68:
-                case 39:
-                case 'D': keydown = ""; break;
-                case 69:
-                case 13: eDown = false; checkPosition(); break
-            }
+document.addEventListener('keyup', function (event) {
+    if (data) {
+        switch (event.keyCode) {
+            //W
+            case 87:
+            case 38:keydown = ""; break;
+            //S
+            case 83:
+            case 40:keydown = ""; break;
+            //A
+            case 65:
+            case 37:keydown = ""; break;
+            //D
+            case 68:
+            case 39:keydown = ""; break;
+            //E
+            case 69:
+            case 13: eDown = false; checkPosition(); break
         }
-    });
+    }
+});
 
-function dead(){
+function dead() {
+    //reset 
     effect = "normal"
 
     playerSprite.classList.remove("player-ghostmode")
@@ -486,6 +483,7 @@ function dead(){
     document.getElementById("countdown").style = `animation-name: none;`
     noMove = true
 
+    //death animation
     setTimeout(function () {
         playerSprite.style.visibility = "hidden"
     }, 200)
@@ -504,52 +502,53 @@ function dead(){
 
     setTimeout(function () {
         playerSprite.style.visibility = "visible"
-        SetPlayerPos(data[data.length-1][0],data[data.length-1][1])
+        SetPlayerPos(data[data.length - 1][0], data[data.length - 1][1])
         effect = "normal"
         noMove = "false"
     }, 1200)
 }
 
-function SetPlayerPos(row,column){
+function SetPlayerPos(row, column) {
     position[0] = row
     position[1] = column
-    
-    player.style = `grid-area: ${row} / ${column} / auto / auto;`
-    }
 
-function win(){
-    if(ifhome == false){
-                locked[level] = false
-level++
-        writeLocalStorrage()
+    player.style = `grid-area: ${row} / ${column} / auto / auto;`
+}
+
+function win() {
+    if (ifhome == false) {
+        locked[level] = false //because levels start at 1 and the array starts at 0
+        level++
+        writeLocalStorrage() //saves progress
         document.getElementById("win-overlay").style = "visibility: visible; opacity: 1"
-        setTimeout(function(){
+        setTimeout(function () {
             document.getElementById("win-box").style = "transform: translateY(0); opacity: 1"
-        },500)
+        }, 500)
     }
 }
 
-function Datum(temp){
+//Date and Time for Phone
+function Datum(temp) {
     var today = new Date();
 
-    if(temp == "datum"){
+    if (temp == "datum") {
         var month = today.getMonth();
         var day = today.getDate();
         var tag = today.getDay();
 
         let monat = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         let tage = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        
-        var datum = `${tage[tag-1]}, ${monat[month]} ${day}`
+
+        var datum = `${tage[tag - 1]}, ${monat[month]} ${day}`
         return datum;
     }
-    if(temp == "zeit"){
+    if (temp == "zeit") {
         var hour = today.getHours();
         var minutes = today.getMinutes();
-        if(hour < 10){
+        if (hour < 10) {
             hour = "0" + hour;
         }
-        if(minutes < 10){
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
         zeit = `${hour}:${minutes}`
@@ -557,23 +556,23 @@ function Datum(temp){
     }
 }
 
-function loadTime(){
-    if(effect != "handy" && ifhome == false){
-    //Zeit und Datum für Handy
-    let datum = Datum("datum")
-    let zeit = Datum("zeit")
+function loadTime() {
+    if (effect != "handy" && ifhome == false) {
+        //Zeit und Datum für Handy
+        let datum = Datum("datum")
+        let zeit = Datum("zeit")
 
-    document.getElementById("date").innerHTML = zeit
-    document.getElementById("date2").innerHTML = datum
-}
+        document.getElementById("date").innerHTML = zeit
+        document.getElementById("date2").innerHTML = datum
+    }
 }
 
-function handyUnlock(){
+function handyUnlock() {
     document.getElementById("unlock").style = "margin-top: 28vw; opacity: 0;"
     document.getElementById("date").style = "padding-top: 2vw; opacity: 0;"
     document.getElementById("date2").style = "opacity: 0;"
 
-    setTimeout(function() {
+    setTimeout(function () {
         loadHandy(posPlayer);
-      }, 400);    
+    }, 400);
 }

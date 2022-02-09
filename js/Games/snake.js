@@ -18,7 +18,7 @@ function loadSnake(){
         }
         let styleS = `grid-template-columns:${fr1}; grid-template-rows:${fr2};`
         //Background
-        styleS += "background-image: url(./img/snake-grid.jpeg);"
+        styleS += "background-image: url(./img/minigames/snake-grid.jpeg);"
         styleS += "background-size: 3vw;"
         styleS += "display: grid;"
         document.getElementById("handy").style += styleS;

@@ -95,6 +95,7 @@ function loadLevelHtml() {
     updateObjects();//so that doors etc are in the right state
     player = document.getElementById('player')
     playerSprite = document.getElementById('player-sprite')
+    document.getElementById("board").style.backgroundSize = `${100/(data.length-1)}%`
 
     loadTime();
 
@@ -121,19 +122,19 @@ function movePlayer() {
             case 0: //up w
                 moveBlocks("w");
                 break
-            case 1: //down s
-
-                moveBlocks("s")
-                break
-            case 2: //left a
+            case 1: //left a
                 moveBlocks("a")
                 break
+            case 2: //down s
+                moveBlocks("s")
+                break
+
             case 3: //right d 
                 moveBlocks("d")
                 break
         }
     } else {
-        if (noMove != true) { //teoretical fix for portal(not working sadge)
+        if (noMove != true) {
             let move = false;
             let pos0 = position[0]
             let pos1 = position[1]
@@ -146,16 +147,16 @@ function movePlayer() {
                         /* playerSprite.style = `transition: all 0.5s;transform: translateY(calc(-90vh/${data[0].length}));` */ //remove me to make movement snappy again (fix it)
                     }
                     break
-                case 1: //down s
-                    move = checkMove(++pos0, pos1);
-                    if (move == true) {
-                        position[0] = Math.min(++position[0], data[1].length)
-                    }
-                    break
-                case 2: //left a
+                case 1: //left a
                     move = checkMove(pos0, --pos1)
                     if (move == true) {
                         position[1] = Math.max(--position[1], 1)
+                    }
+                    break
+                case 2: //down s
+                    move = checkMove(++pos0, pos1);
+                    if (move == true) {
+                        position[0] = Math.min(++position[0], data[1].length)
                     }
                     break
                 case 3: //right d 
@@ -218,6 +219,9 @@ function checkMove(nextY, nextX) {
             case "tw": //temporary wall
                 return true;
                 break
+            case "ls": //temporary wall
+                return false;
+                break
             case "dr": //door
                 if (data[nextY - 1][nextX - 1].substr(3, 2) == "ky") {
 
@@ -229,6 +233,14 @@ function checkMove(nextY, nextX) {
                     else if (data[nextY - 1][nextX - 1].substr(12, 2) == "cl") {
                         return false;
                     }
+                }
+                break
+            case "ow": //oneway wall
+                if (data[nextY - 1][nextX - 1].substr(6,2) == keydown) {
+                    return true;
+                }
+                else{
+                    return false;
                 }
                 break
             default: //feld ist ghost etc.
@@ -359,10 +371,10 @@ function setElements() {
                         break;
                     case ("lv"): //lever
                         if (data[i][j].substr(6, 2) == "on") {
-                            back = "url(../img/blocks/lever_on.png)"
+                            back = "url(./img/blocks/lever_on.png)"
                         }
                         else if (data[i][j].substr(6, 2) == "of") {
-                            back = "url(../img/blocks/lever_off.png)"
+                            back = "url(./img/blocks/lever_off.png)"
                         }
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-image:${back};" class="lever" id="lever-${data[i][j].substr(3, 2)}"></div>`
                         break;
@@ -373,10 +385,17 @@ function setElements() {
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-color: rgb(100, 80, 0);" class="block"></div>`
                         break;
                     case ("tw"): //temp wall
-                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; background-color: lightgreen; display:grid" class="block"><div style="background-color: red;" class="tempwall" id="tempwall-${data[i][j].substr(3, 2)}"></div></div>`
+                        document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto;" class="block tempwall-base"><div class="tempwall" id="tempwall-${data[i][j].substr(3, 2)}"></div></div>`
                         break;
                     case ("dr"): //door
                         document.getElementById("board").innerHTML += `<div style="grid-area: ${i + 1} / ${j + 1} / auto / auto; display:grid;" class="block door" id="door-${data[i][j].substr(3, 2)}"><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div><div class="sub-door"></div></div>`
+                        break;
+                    case ("ow"): //oneway wall
+                        document.getElementById("board").innerHTML += `<div id="oneway-${data[i][j].substr(3, 2)}" style="grid-area: ${i + 1} / ${j + 1} / auto / auto;" class="relativ oneway-base"><div class="oneway block" style="transform: rotate(-${data[i][j].substr(6, 1)*90}deg);"></div ></div>`
+                        break;
+                    case ("ls"): //laser
+                        document.getElementById("board").innerHTML += `<div id="laser-${data[i][j].substr(3, 2)}" style="grid-area: ${i + 1} / ${j + 1} / auto / auto;" class="laser-base block"></div>`
+                        generateLaserbeam(data[i][j],i,j)
                         break;
                 }
             }
@@ -428,19 +447,19 @@ document.addEventListener('keydown', function (event) {
         switch (event.keyCode) {
             //W
             case 87:
-            case 38:keydown = 0; movePlayer(); break;
-            //S
-            case 83:
-            case 40:keydown = 1; movePlayer(); break;
+            case 38:keydown = 0; if(!event.repeat) movePlayer(); break;
             //A
             case 65:
-            case 37:keydown = 2; movePlayer(); break;
+            case 37:keydown = 1; if(!event.repeat) movePlayer(); break;
+            //S
+            case 83:
+            case 40:keydown = 2; if(!event.repeat) movePlayer(); break;
             //D
             case 68:
-            case 39:keydown = 3; movePlayer(); break;
+            case 39:keydown = 3; if(!event.repeat) movePlayer(); break;
             // E
             case 69:
-            case 13: eDown = true; checkPosition(); break
+            case 13: if(!event.repeat) {eDown = true; checkPosition();} break
         }
     }
 });

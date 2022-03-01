@@ -17,7 +17,7 @@ function loadTetris() {
 
     //Background
     styleS += "background-image: url(./img/minigames/tetris_background.jpg);"
-    document.getElementById("game").style += styleS;
+    document.getElementById("game").style += styleS; 
 
     randomObject();
     setBlocks();

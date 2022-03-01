@@ -24,8 +24,13 @@ function trap() {
     }
 }
 
+function generateLaserbeam(data,x,y){
+    if(data.substr(6,1)==1){
+    }
+}
+
 function portal(nextY, nextX) {
-    noMove = true //should fix the portal movement bug
+    noMove = true //doesnt let the player move while portal animation
     setTimeout(function () {
         playerSprite.style.width = "120%"
         playerSprite.style.height = " 120%"
@@ -46,8 +51,8 @@ function portal(nextY, nextX) {
         position[1] = parseInt(data[nextY - 1][nextX - 1].substr(6, 2))
 
         player.style = `grid-area: ${position[0]} / ${position[1]} / auto / auto;`
+        noMove = false //player out of the portal - moving allowed again
     }, 400)
-    noMove = false
 }
 
 function tempwall() {
@@ -89,11 +94,11 @@ function lever() {
 
         if (data[myrow][mycol].substr(6, 2) == "on") {
             data[myrow][mycol] = `${data[myrow][mycol].substr(0, 6)}of`
-            lever.style.backgroundImage = "url(../img/blocks/lever_off.png)"
+            lever.style.backgroundImage = "url(./img/blocks/lever_off.png)"
         }
         else if (data[myrow][mycol].substr(6, 2) == "of") {
             data[myrow][mycol] = `${data[myrow][mycol].substr(0, 6)}on`
-            lever.style.backgroundImage = "url(../img/blocks/lever_on.png)"
+            lever.style.backgroundImage = "url(./img/blocks/lever_on.png)"
         }
         updateObjects()
     }
